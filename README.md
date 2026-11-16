@@ -1,24 +1,86 @@
-> **About this fork: Egg Tart.** This is a standalone build of Clawd on Desk for people who don't use an AI coding tool. It never connects to Claude Code, Codex or any other agent.
->
-> - **Out of the box:** the pet wanders around your desktop when you leave the mouse alone. Every minute or so it plays a little activity, like typing, building, juggling, sweeping or celebrating. It falls asleep after a minute of no mouse movement, and moving the mouse wakes it. You can change this in **Settings → Pet → When idle**.
-> - **Nothing written to AI-tool config:** no hooks, plugins or editor extensions, and no first-run tutorial.
-> - **No update checks:** the app never checks for or installs updates, so an upstream release can't replace this build.
-> - **Simpler menus:** the dashboard, recap, new session, permission and bubble items are hidden.
-> - **Separate app:** it's called "Egg Tart" (`com.clawd.desk-pet`) and keeps its own settings. Menus and Settings say "Egg Tart" instead of "Clawd". On a Mac that also runs the original Clawd on Desk, the two still share the small `~/.clawd` data folder, so quit the original while trying this one.
->
-> **Build:** run `npm install && npm run build:mac`. You get `dist/Egg-Tart-<version>-arm64.dmg` for Apple Silicon and `-x64.dmg` for Intel. To check which one a Mac needs, open  → About This Mac: "Apple M…" means arm64, "Intel" means x64.
->
-> **First launch:** drag the app into Applications. It isn't notarized by Apple, so macOS blocks the first open:
-> - **macOS 15 Sequoia and later:** open it once and dismiss the warning. Then go to **System Settings → Privacy & Security**, scroll down, click **Open Anyway** next to "Egg Tart" and confirm.
-> - **macOS 14 and earlier:** right-click the app in Applications, choose **Open**, then **Open** again.
->
-> After that it opens normally. To have it there every day, turn on **Start on Login** from its menu-bar icon.
->
-> **The pet:** a Sunny Side egg tart (`themes/egg-tart`). It has its own animation for every state, plus hobby scenes and encouragement signs in the random rotation. Clawd, Calico and Cloudling are still available under Settings → Theme.
->
-> **Changing the sign phrases:** edit the list on the art side so the sign SVGs and `signs.json` regenerate, then run `npm run sync:egg-tart -- <art-folder>`. That copies new signs, deletes removed ones and updates `theme.json`. Rebuild afterwards.
->
-> Everything below is the original project's README.
+<p align="center">
+  <img src="assets/icon.png" width="160" alt="Egg Tart">
+</p>
+
+<h1 align="center">Egg Tart</h1>
+
+<p align="center">A little pixel egg tart that lives on your Mac's desktop and keeps itself busy.</p>
+
+<p align="center">
+  <a href="https://github.com/AidanZhang06/egg-tart/releases/latest/download/Egg-Tart-Apple-Silicon.dmg"><img src="https://img.shields.io/badge/Download%20for%20Mac-F2B73C?style=for-the-badge&logo=apple&logoColor=white" alt="Download for Mac" height="48"></a>
+</p>
+<p align="center">
+  <sub>For Macs with Apple Silicon (M1, M2, M3, M4…) · <a href="https://github.com/AidanZhang06/egg-tart/releases/latest/download/Egg-Tart-Intel.dmg">Older Intel Mac? Download this one</a></sub>
+</p>
+
+## Install it (about a minute)
+
+1. Click **Download for Mac** above and open the file that downloads.
+2. Drag **Egg Tart** into the **Applications** folder.
+3. Open **Egg Tart** from Applications. macOS asks for permission the first time, because the app isn't from the App Store:
+   - **macOS 15 Sequoia or later:** open it once and dismiss the warning. Then go to **System Settings → Privacy & Security**, scroll down, click **Open Anyway** next to "Egg Tart" and confirm.
+   - **macOS 14 or earlier:** right-click Egg Tart in Applications, choose **Open**, then **Open** again.
+
+That's it. From then on Egg Tart starts by itself whenever the Mac does.
+
+Not sure which Mac you have? Open the Apple menu → **About This Mac**. "Chip: Apple M…" means Apple Silicon, and "Processor: Intel" means Intel.
+
+## What it does
+
+- It wanders around the desktop while you leave the mouse alone, and stops as soon as you move it.
+- Every so often it does something:
+  - thinks
+  - whisks custard
+  - does a happy hop
+  - sweeps crumbs
+  - carries a gift box
+  - juggles mini tarts
+- It has hobbies:
+  - crochet
+  - reading
+  - music
+  - bubble tea
+  - science
+  - painting
+  - gardening
+  - coding
+  - weightlifting
+- It holds up little signs, with encouragement, love notes and missing-you messages.
+- After a minute without the mouse it yawns, dozes off and sleeps. Moving the mouse wakes it.
+- Drag it, poke it, double-click it, or spin the cursor around it.
+
+## Settings
+
+Right-click the egg tart, or click its icon in the menu bar:
+
+- **Walk Around**: untick to keep it in one place. It still does its activities.
+- **Size**: Small, Medium, Large or Extra Large.
+- **Sleep**: pause it for a while.
+- **Start on Login**: on by default.
+- **Settings… → Pet**:
+  - **When idle**: stay put, walk only, activities only, or both.
+  - **How often**: how often it does something.
+
+No account, no internet connection and no AI tools needed. It never updates itself; new versions show up on the [releases page](https://github.com/AidanZhang06/egg-tart/releases).
+
+## For developers
+
+Egg Tart is a standalone fork of [Clawd on Desk](https://github.com/rullerzhou-afk/clawd-on-desk). It never connects to Claude Code, Codex or any other agent:
+
+- **No agent hookup:** nothing is written to AI-tool config, with no hooks, plugins or editor extensions, and there's no first-run tutorial.
+- **No updates:** there are no update checks and no update feed, so an upstream release can't replace this build.
+- **Simpler menus:** dashboard, recap, new session, permission and bubble items are hidden.
+- **Own name, own settings:** it shows "Egg Tart" instead of "Clawd" and keeps its own settings (`com.clawd.desk-pet`). On a Mac that also runs Clawd on Desk, the two share the small `~/.clawd` folder, so quit the original while trying this one.
+
+How to work on it:
+
+- **Build:** `npm install && npm run build:mac` gives `dist/Egg-Tart-<version>-arm64.dmg` and `-x64.dmg`. The source lives on the `desk-pet-standalone` branch.
+- **The pet:** the art is in `themes/egg-tart`. To change the sign phrases, edit the list on the art side so the sign SVGs and `signs.json` regenerate, then run `npm run sync:egg-tart -- <art-folder>` and rebuild.
+
+Source code is AGPL-3.0, like the original project. Clawd and the original artwork belong to their respective owners (see below).
+
+<details>
+<summary><b>About the original project, Clawd on Desk</b></summary>
 
 <p align="center">
   <img src="assets/icon.png" width="128" alt="Clawd">
@@ -195,3 +257,5 @@ Source code is licensed under the [GNU Affero General Public License v3.0](LICEN
 - **Third-party contributions**: copyright retained by respective artists.
 
 **No cryptocurrency.** This project has no token, coin, NFT, or airdrop, and is not affiliated with any cryptocurrency project.
+
+</details>
