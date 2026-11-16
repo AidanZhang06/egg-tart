@@ -28,7 +28,7 @@
     },
     {
       "file": "sign-cheer-youre-amazing.svg",
-      "phrase": "You're amazing!",
+      "phrase": "You're amazing",
       "kind": "encouragement"
     },
     {
@@ -37,13 +37,13 @@
       "kind": "encouragement"
     },
     {
-      "file": "sign-cheer-i-believe-in-you.svg",
-      "phrase": "I believe in you!",
+      "file": "sign-cheer-im-rooting-for-you.svg",
+      "phrase": "I'm rooting for you",
       "kind": "encouragement"
     },
     {
-      "file": "sign-cheer-proud-of-you.svg",
-      "phrase": "Proud of you ♥",
+      "file": "sign-cheer-im-always-proud-of-you.svg",
+      "phrase": "I'm always proud of you",
       "kind": "encouragement"
     },
     {
@@ -62,8 +62,13 @@
       "kind": "encouragement"
     },
     {
-      "file": "sign-cheer-drink-some-water.svg",
-      "phrase": "Drink some water!",
+      "file": "sign-cheer-take-it-easy.svg",
+      "phrase": "Take it easy",
+      "kind": "encouragement"
+    },
+    {
+      "file": "sign-cheer-were-a-power-chouple.svg",
+      "phrase": "We're a power chouple",
       "kind": "encouragement"
     },
     {
@@ -113,42 +118,12 @@
     },
     {
       "file": "sign-miss-i-miss-you.svg",
-      "phrase": "I miss you ♥",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-thinking-of-you.svg",
-      "phrase": "Thinking of you",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-wish-you-were-here.svg",
-      "phrase": "Wish you were here",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-cant-wait-to-see-you.svg",
-      "phrase": "Can't wait to see you!",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-sending-hugs.svg",
-      "phrase": "Sending hugs ♥",
+      "phrase": "I miss you :(",
       "kind": "missing"
     },
     {
       "file": "sign-miss-come-back-soon.svg",
-      "phrase": "Come back soon!",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-counting-the-days.svg",
-      "phrase": "Counting the days ♥",
-      "kind": "missing"
-    },
-    {
-      "file": "sign-miss-miss-you-lots.svg",
-      "phrase": "Miss you lots",
+      "phrase": "Come back soon",
       "kind": "missing"
     }
   ]

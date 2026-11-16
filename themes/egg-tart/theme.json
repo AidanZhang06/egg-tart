@@ -158,12 +158,12 @@
       "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-cheer-i-believe-in-you.svg",
+      "file": "sign-cheer-im-rooting-for-you.svg",
       "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-cheer-proud-of-you.svg",
+      "file": "sign-cheer-im-always-proud-of-you.svg",
       "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
@@ -183,7 +183,12 @@
       "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-cheer-drink-some-water.svg",
+      "file": "sign-cheer-take-it-easy.svg",
+      "duration": 8550,
+      "activityGroup": "signs-encouragement"
+    },
+    {
+      "file": "sign-cheer-were-a-power-chouple.svg",
       "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
@@ -238,37 +243,7 @@
       "activityGroup": "signs-missing"
     },
     {
-      "file": "sign-miss-thinking-of-you.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
-      "file": "sign-miss-wish-you-were-here.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
-      "file": "sign-miss-cant-wait-to-see-you.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
-      "file": "sign-miss-sending-hugs.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
       "file": "sign-miss-come-back-soon.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
-      "file": "sign-miss-counting-the-days.svg",
-      "duration": 8550,
-      "activityGroup": "signs-missing"
-    },
-    {
-      "file": "sign-miss-miss-you-lots.svg",
       "duration": 8550,
       "activityGroup": "signs-missing"
     }
