@@ -27,6 +27,8 @@ function applyDeskPetFirstRunDefaults(snapshot) {
   return {
     ...base,
     agents,
+    // The built-in Egg Tart theme (themes/egg-tart) is this build's pet.
+    theme: "egg-tart",
     freeRoam: true,
     idleActivities: true,
     idleActivityFrequency: "medium",
