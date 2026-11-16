@@ -66,11 +66,11 @@ describe("syncEggTartTheme", () => {
 
     const theme = JSON.parse(fs.readFileSync(path.join(themeDir, "theme.json"), "utf8"));
     // Hobbies keep their hand-set metadata and order; signs follow, in list
-    // order, played for the rise plus whole sway loops (550 + 6 × 2000).
+    // order, played for the rise plus whole sway loops (550 + 4 × 2000).
     assert.deepEqual(theme.idleAnimations, [
       { file: "hobby-read.svg", duration: 9600, mirrorOnRightSide: true },
-      { file: "sign-keep-going.svg", duration: 12550, activityGroup: SIGN_GROUP },
-      { file: "sign-you-got-this.svg", duration: 12550, activityGroup: SIGN_GROUP },
+      { file: "sign-keep-going.svg", duration: 8550, activityGroup: SIGN_GROUP },
+      { file: "sign-you-got-this.svg", duration: 8550, activityGroup: SIGN_GROUP },
     ]);
     assert.deepEqual(theme.states, BASE_THEME.states);
     // The phrase list travels with the theme for reference.
@@ -108,9 +108,9 @@ describe("syncEggTartTheme", () => {
     const theme = JSON.parse(fs.readFileSync(path.join(themeDir, "theme.json"), "utf8"));
     assert.deepEqual(theme.idleAnimations, [
       { file: "hobby-read.svg", duration: 9600, mirrorOnRightSide: true },
-      { file: "sign-cheer-keep-going.svg", duration: 12550, activityGroup: "signs-encouragement" },
-      { file: "sign-love-i-love-you.svg", duration: 12550, activityGroup: "signs-love" },
-      { file: "sign-cheer-almost-there.svg", duration: 12550, activityGroup: "signs-encouragement" },
+      { file: "sign-cheer-keep-going.svg", duration: 8550, activityGroup: "signs-encouragement" },
+      { file: "sign-love-i-love-you.svg", duration: 8550, activityGroup: "signs-love" },
+      { file: "sign-cheer-almost-there.svg", duration: 8550, activityGroup: "signs-encouragement" },
     ]);
   });
 

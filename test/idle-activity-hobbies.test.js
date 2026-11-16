@@ -6,7 +6,6 @@ const assert = require("node:assert/strict");
 const {
   createIdleActivityController,
   listIdleActivityCandidates,
-  pickDuration,
   IDLE_ACTIVITY_FREQUENCIES,
 } = require("../src/idle-activity");
 
@@ -30,7 +29,7 @@ test("candidates are the activity states plus usable idleAnimations entries", ()
   assert.deepEqual(listIdleActivityCandidates(THEME), [
     { state: "thinking", files: ["think.svg"] },
     { state: "idle", files: ["hobby-read.svg"], duration: 8000 },
-    { state: "idle", files: ["hobby-long.svg"], duration: 20000 },
+    { state: "idle", files: ["hobby-long.svg"], duration: 15000 },
     { state: "idle", files: ["hobby-short.svg"], duration: 2000 },
   ]);
   assert.deepEqual(listIdleActivityCandidates(null), []);
@@ -97,14 +96,12 @@ test("plays a hobby scene for its own declared duration", () => {
   assert.deepEqual(restores, [startedAt + 8000]);
 });
 
-test("clamps hobby durations to 2–20 s", () => {
-  const long = playOnce(0.6); // index 2 → hobby-long.svg, 30000 → 20000
+test("clamps hobby durations to 2–15 s", () => {
+  const long = playOnce(0.6); // index 2 → hobby-long.svg, 30000 → 15000
   assert.equal(long.request.args[2], "hobby-long.svg");
   const longStart = long.clock.now();
-  long.clock.advance(19999);
-  assert.deepEqual(long.restores, []);
-  long.clock.advance(1);
-  assert.deepEqual(long.restores, [longStart + 20000]);
+  long.clock.advance(15000);
+  assert.deepEqual(long.restores, [longStart + 15000]);
 
   const short = playOnce(0.9); // index 3 → hobby-short.svg, 500 → 2000
   assert.equal(short.request.args[2], "hobby-short.svg");
@@ -149,19 +146,4 @@ test("a grouped candidate plays a random member", () => {
   clock.advance(IDLE_ACTIVITY_FREQUENCIES.medium.first[1]);
   controller.tick();
   assert.deepEqual(sent.map((args) => args[2]), ["sign-b.svg"]);
-});
-
-test("a theme's idleActivityDurations sets a state's exact whole-loop duration", () => {
-  const theme = {
-    timings: { autoReturn: { attention: 4000 } },
-    idleActivityDurations: { attention: 11200, thinking: 9600, working: 60000, carrying: 500 },
-  };
-  for (const roll of [0, 0.5, 0.99]) {
-    assert.equal(pickDuration(theme, "attention", () => roll), 11200, "no jitter, autoReturn ignored");
-    assert.equal(pickDuration(theme, "thinking", () => roll), 9600);
-  }
-  assert.equal(pickDuration(theme, "working", () => 0), 20000, "capped at 20 s");
-  assert.equal(pickDuration(theme, "carrying", () => 0), 2000, "floored at 2 s");
-  // States without an entry keep the upstream autoReturn-based behavior.
-  assert.equal(pickDuration({ idleActivityDurations: {} }, "sweeping", () => 0), 2550);
 });

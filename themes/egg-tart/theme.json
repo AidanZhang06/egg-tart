@@ -101,183 +101,175 @@
       "fallbackTo": "attention"
     }
   },
-  "idleActivityDurations": {
-    "thinking": 9600,
-    "working": 9600,
-    "juggling": 10000,
-    "attention": 11200,
-    "sweeping": 10000,
-    "carrying": 12000
-  },
   "idleAnimations": [
     {
       "file": "hobby-crochet.svg",
-      "duration": 14400,
+      "duration": 9600,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-reading.svg",
-      "duration": 14400,
+      "duration": 9600,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-music.svg",
-      "duration": 12000,
+      "duration": 8000,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-bubbletea.svg",
-      "duration": 12000,
+      "duration": 8000,
       "mirrorOnRightSide": false
     },
     {
       "file": "hobby-science.svg",
-      "duration": 12000,
+      "duration": 8000,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-painting.svg",
-      "duration": 16000,
+      "duration": 8000,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-gardening.svg",
-      "duration": 16000,
+      "duration": 8000,
       "mirrorOnRightSide": true
     },
     {
       "file": "sign-cheer-keep-going.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-you-got-this.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-youre-amazing.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-youre-doing-great.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-im-rooting-for-you.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-im-always-proud-of-you.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-one-step-at-a-time.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-almost-there.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-take-a-little-break.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-take-it-easy-my-warrior.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-were-a-power-chouple.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-cheer-hang-in-there-baby.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
     {
       "file": "sign-love-we-got-this.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-were-going-to-make-it.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-were-locked-in.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-i-love-you-so-much.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-i-love-you-always.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-eggtart-and-cocobun-forever.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-chocolate-and-strawberry-forever.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-youre-looking-beautiful-rn.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-youre-the-sweetest-ever.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-hi-code-monkie.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-love-heart.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
       "file": "sign-miss-i-miss-you.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-missing"
     },
     {
       "file": "sign-miss-come-back-soon.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-missing"
     },
     {
       "file": "sign-miss-eggtart-misses-cocobun.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-missing"
     },
     {
       "file": "sign-miss-where-is-my-cocobun.svg",
-      "duration": 12550,
+      "duration": 8550,
       "activityGroup": "signs-missing"
     }
   ],

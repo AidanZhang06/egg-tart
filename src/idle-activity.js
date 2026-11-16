@@ -69,7 +69,7 @@ function listIdleActivityStates(theme) {
 // desk-pet: a theme's idleAnimations (hobby scenes such as reading or
 // crocheting) also join the random activity pool. Each plays for its declared
 // duration, clamped so a beat is long enough to read but never takes over.
-const MAX_IDLE_ANIMATION_DURATION_MS = 20000;
+const MAX_IDLE_ANIMATION_DURATION_MS = 15000;
 
 // Entries that share an `activityGroup` (e.g. a set of encouragement signs)
 // collapse into one pool entry, weighted like a single animation, that plays a
@@ -109,13 +109,6 @@ function listIdleActivityCandidates(theme) {
 }
 
 function pickDuration(theme, state, random) {
-  // desk-pet: a theme may pin a state's activity length to whole loops of its
-  // animation (e.g. ~10 s), so a beat neither cuts off mid-motion nor ends
-  // after a blink. No jitter: the value is already loop-aligned.
-  const pinned = theme && theme.idleActivityDurations && Number(theme.idleActivityDurations[state]);
-  if (Number.isFinite(pinned) && pinned > 0) {
-    return Math.min(MAX_IDLE_ANIMATION_DURATION_MS, Math.max(MIN_DURATION_MS, Math.round(pinned)));
-  }
   const autoReturn = theme && theme.timings && theme.timings.autoReturn;
   const configured = autoReturn && Number(autoReturn[state]);
   const base = Number.isFinite(configured) && configured > 0 ? configured : DEFAULT_DURATION_MS;

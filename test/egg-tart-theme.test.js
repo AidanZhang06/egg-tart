@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
-const { listIdleActivityCandidates, pickDuration } = require("../src/idle-activity");
+const { listIdleActivityCandidates } = require("../src/idle-activity");
 
 const THEME_DIR = path.join(__dirname, "..", "themes", "egg-tart");
 const ASSETS_DIR = path.join(THEME_DIR, "assets");
@@ -59,15 +59,15 @@ describe("egg tart theme", () => {
     const hobbies = listIdleActivityCandidates(theme)
       .filter((candidate) => candidate.files[0].startsWith("hobby-"))
       .map((candidate) => [candidate.files[0], candidate.duration]);
-    // Whole loops: 4.8 s and 4 s loops play three times, 8 s loops twice.
+    // 4.8 s loops play twice (9.6 s); 4 s loops play twice (8 s).
     assert.deepEqual(hobbies, [
-      ["hobby-crochet.svg", 14400],
-      ["hobby-reading.svg", 14400],
-      ["hobby-music.svg", 12000],
-      ["hobby-bubbletea.svg", 12000],
-      ["hobby-science.svg", 12000],
-      ["hobby-painting.svg", 16000],
-      ["hobby-gardening.svg", 16000],
+      ["hobby-crochet.svg", 9600],
+      ["hobby-reading.svg", 9600],
+      ["hobby-music.svg", 8000],
+      ["hobby-bubbletea.svg", 8000],
+      ["hobby-science.svg", 8000],
+      ["hobby-painting.svg", 8000],
+      ["hobby-gardening.svg", 8000],
     ]);
     // Scenes whose effects reach right mirror near the right screen edge;
     // bubble tea's heart floats up-left, so it never needs to.
@@ -93,8 +93,7 @@ describe("egg tart theme", () => {
       assert.ok(expected.length > 0, kind);
       assert.ok(signSlots.some((slot) => JSON.stringify(slot.files) === JSON.stringify(expected)), `slot for ${kind}`);
     }
-    // 550 ms rise plus six whole 2 s sways.
-    for (const slot of signSlots) assert.equal(slot.duration, 12550);
+    for (const slot of signSlots) assert.equal(slot.duration, 8550);
     const listed = doc.signs.map((sign) => sign.file);
     const shipped = fs.readdirSync(ASSETS_DIR).filter((file) => file.startsWith("sign-")).sort();
     assert.deepEqual(shipped, [...listed].sort(), "no stale or missing sign files");
@@ -124,16 +123,6 @@ describe("egg tart theme", () => {
     assert.deepEqual(theme.reactions.double, { files: ["react-double.svg"], duration: 3500 });
     assert.deepEqual(theme.states.dizzy, ["dizzy.svg"]);
     assert.equal(theme.timings.autoReturn.dizzy, 6000);
-  });
-
-  it("plays each activity for about ten seconds of whole loops", () => {
-    const theme = loadTheme();
-    // thinking 4.8 s ×2, working 1.6 s ×6, juggling 2 s ×5, attention 2.8 s ×4,
-    // sweeping 10 s ×1, carrying 3 s ×4.
-    const expected = { thinking: 9600, working: 9600, juggling: 10000, attention: 11200, sweeping: 10000, carrying: 12000 };
-    for (const [state, ms] of Object.entries(expected)) {
-      assert.equal(pickDuration(theme, state, Math.random), ms, state);
-    }
   });
 
   it("walks, sleeps, wakes and tracks the cursor with its own art", () => {
