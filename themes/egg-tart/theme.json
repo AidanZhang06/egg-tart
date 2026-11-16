@@ -146,6 +146,16 @@
       "mirrorOnRightSide": true
     },
     {
+      "file": "hobby-coding.svg",
+      "duration": 14816,
+      "mirrorOnRightSide": false
+    },
+    {
+      "file": "hobby-weights.svg",
+      "duration": 12000,
+      "mirrorOnRightSide": false
+    },
+    {
       "file": "sign-cheer-keep-going.svg",
       "duration": 12550,
       "activityGroup": "signs-encouragement"

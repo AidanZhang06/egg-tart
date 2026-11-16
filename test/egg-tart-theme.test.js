@@ -68,6 +68,8 @@ describe("egg tart theme", () => {
       ["hobby-science.svg", 12000],
       ["hobby-painting.svg", 16000],
       ["hobby-gardening.svg", 16000],
+      ["hobby-coding.svg", 14816],
+      ["hobby-weights.svg", 12000],
     ]);
     // Scenes whose effects reach right mirror near the right screen edge;
     // bubble tea's heart floats up-left, so it never needs to.
