@@ -307,6 +307,8 @@
   }
 
   function readIdleBehavior(snapshot = state.snapshot) {
+    // desk-pet: walking and activities may both be on.
+    if (snapshot && snapshot.freeRoam === true && snapshot.idleActivities === true) return "both";
     if (snapshot && snapshot.freeRoam === true) return "roam";
     return snapshot && snapshot.idleActivities === true ? "activities" : "none";
   }
@@ -348,6 +350,7 @@
         { value: "none", label: t("idleBehaviorNone") },
         { value: "roam", label: t("idleBehaviorRoam") },
         { value: "activities", label: t("idleBehaviorActivities") },
+        { value: "both", label: t("idleBehaviorBoth") },
       ],
       onChange(mode) {
         return saveIdleBehavior(mode).then((accepted) => {
@@ -372,12 +375,15 @@
         none: "idleBehaviorNoneDesc",
         roam: "idleBehaviorRoamDesc",
         activities: "idleBehaviorActivitiesDesc",
+        both: "idleBehaviorBothDesc",
       };
       description.textContent = t(descriptionKeys[mode]);
+      const roams = mode === "roam" || mode === "both";
+      const playsActivities = mode === "activities" || mode === "both";
       for (const [row, visible] of [
-        [movementRow, mode === "roam"],
-        [areaRow, mode === "roam"],
-        [frequencyRow, mode === "activities"],
+        [movementRow, roams],
+        [areaRow, roams],
+        [frequencyRow, playsActivities],
       ]) {
         row.hidden = !visible;
         row.setAttribute("aria-hidden", visible ? "false" : "true");

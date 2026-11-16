@@ -144,7 +144,8 @@ describe("i18n locales", () => {
   it("localizes idle behavior choices and descriptions in every Settings locale", () => {
     const strings = loadSettingsI18nStrings();
     const keys = ["rowIdleBehavior", "idleBehaviorNone", "idleBehaviorRoam", "idleBehaviorActivities",
-      "idleBehaviorNoneDesc", "idleBehaviorRoamDesc", "idleBehaviorActivitiesDesc"];
+      "idleBehaviorNoneDesc", "idleBehaviorRoamDesc", "idleBehaviorActivitiesDesc",
+      "idleBehaviorBoth", "idleBehaviorBothDesc"];
     for (const lang of SUPPORTED_LANGS) {
       for (const key of keys) {
         assert.strictEqual(typeof strings[lang][key], "string", `${lang}.${key}`);
@@ -157,6 +158,7 @@ describe("i18n locales", () => {
     assert.deepStrictEqual(keys.map((key) => strings.zh[key]), [
       "空闲时", "原地待机", "自由漫步", "小动作", "只在原地待机、东张西望和打盹。",
       "空闲时在桌面上自由走动，移动鼠标即停止。", "没有 Agent 在运行时，偶尔播放主题里的其他动画。",
+      "边走边玩", "空闲时在桌面上走动，并偶尔播放主题里的其他动画。移动鼠标即停止走动。",
     ]);
     assert.deepStrictEqual(keys.slice(0, 4).map((key) => strings.en[key]),
       ["When idle", "Stay put", "Free roam", "Idle activities"]);

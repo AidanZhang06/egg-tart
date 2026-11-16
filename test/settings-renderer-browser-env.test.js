@@ -12716,7 +12716,7 @@ describe("settings renderer browser environment", () => {
     { mode: "none", freeRoam: false, idleActivities: false, description: "Stay in place, look around, and doze." },
     { mode: "roam", freeRoam: true, idleActivities: false, description: "Wander freely around the desktop when idle. Movement stops when you move the mouse." },
     { mode: "activities", freeRoam: false, idleActivities: true, description: "While no agent is active, occasionally play another animation from the theme." },
-    { mode: "roam", freeRoam: true, idleActivities: true, description: "Wander freely around the desktop when idle. Movement stops when you move the mouse." },
+    { mode: "both", freeRoam: true, idleActivities: true, description: "Wander around the desktop and occasionally play another animation from the theme. Walking stops when you move the mouse." },
   ];
 
   function assertIdleBehavior(harness, scenario) {
@@ -12725,9 +12725,9 @@ describe("settings renderer browser environment", () => {
     assert.strictEqual(control.getValue(), scenario.mode);
     assert.strictEqual(group.querySelector(".idle-behavior-mode-row .row-desc").textContent, scenario.description);
     for (const [selector, visible] of [
-      [".roam-movement-style-row", scenario.mode === "roam"],
-      [".roam-area-row", scenario.mode === "roam"],
-      [".idle-activity-frequency-row", scenario.mode === "activities"],
+      [".roam-movement-style-row", scenario.mode === "roam" || scenario.mode === "both"],
+      [".roam-area-row", scenario.mode === "roam" || scenario.mode === "both"],
+      [".idle-activity-frequency-row", scenario.mode === "activities" || scenario.mode === "both"],
     ]) {
       const row = group.querySelector(selector);
       assert.strictEqual(row.hidden, !visible, selector);
@@ -12747,7 +12747,7 @@ describe("settings renderer browser environment", () => {
       assert.strictEqual(control.element.getAttribute("role"), "radiogroup");
       assert.strictEqual(control.element.getAttribute("aria-label"), "When idle");
       assert.deepStrictEqual(control.element.querySelectorAll("button").map((button) => button.textContent),
-        ["Stay put", "Free roam", "Idle activities"]);
+        ["Stay put", "Free roam", "Idle activities", "Roam + activities"]);
       assert.strictEqual(harness.getSwitch("freeRoam"), null);
       assert.strictEqual(harness.getSwitch("idleActivities"), null);
       assertIdleBehavior(harness, scenario);
@@ -12757,7 +12757,7 @@ describe("settings renderer browser environment", () => {
   it("lays out idle behavior choices at full width and hides inactive detail rows", () => {
     const css = fs.readFileSync(path.join(SRC_DIR, "settings.css"), "utf8").replace(/\r\n/g, "\n");
     assert.match(css, /\.idle-behavior-group \.row\[hidden\]\s*\{\s*display: none;/);
-    assert.match(css, /\.idle-behavior-mode-segmented\s*\{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+    assert.match(css, /\.idle-behavior-mode-segmented\s*\{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
     assert.match(css, /\.idle-behavior-group \.settings-segmented-radio\s*\{\s*width: 100%/);
     assert.match(css, /\.idle-behavior-group \.settings-segmented-radio button\s*\{[^}]*white-space: normal/);
   });
@@ -12775,7 +12775,7 @@ describe("settings renderer browser environment", () => {
     const movement = mounted.roamMovementStyle;
     const frequency = mounted.idleActivityFrequency;
     const before = harness.getContentRenderCount();
-    for (const index of [1, 2, 0, 2, 1]) {
+    for (const index of [1, 2, 0, 3, 2, 1]) {
       const scenario = idleBehaviorCases[index];
       mode.element.querySelectorAll("button").find((button) => button.dataset.value === scenario.mode)
         .dispatchEvent({ type: "click", bubbles: false });
