@@ -22,7 +22,7 @@ describe("desk pet first-run defaults", () => {
     const seed = applyDeskPetFirstRunDefaults(prefs.getDefaults());
     assert.strictEqual(seed.freeRoam, true);
     assert.strictEqual(seed.idleActivities, true);
-    assert.strictEqual(seed.idleActivityFrequency, "medium");
+    assert.strictEqual(seed.idleActivityFrequency, "high");
   });
 
   it("seed disables every agent integration", () => {

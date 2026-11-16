@@ -31,7 +31,9 @@ function applyDeskPetFirstRunDefaults(snapshot) {
     theme: "egg-tart",
     freeRoam: true,
     idleActivities: true,
-    idleActivityFrequency: "medium",
+    // "high" = an activity every 30–50 s, so the pet is busy rather than
+    // mostly resting. Adjustable in Settings → Pet.
+    idleActivityFrequency: "high",
     manageClaudeHooksAutomatically: false,
     autoStartWithClaude: false,
     autoStartWithCodex: false,
