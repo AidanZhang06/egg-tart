@@ -136,6 +136,10 @@ function createIdleActivityController(options = {}) {
   const now = typeof options.now === "function" ? options.now : Date.now;
   const setTimer = typeof options.setTimeout === "function" ? options.setTimeout : setTimeout;
   const clearTimer = typeof options.clearTimeout === "function" ? options.clearTimeout : clearTimeout;
+  // desk-pet: an edition may supply its own spacing scale (same keys).
+  const frequencies = options.frequencies && typeof options.frequencies === "object"
+    ? options.frequencies
+    : IDLE_ACTIVITY_FREQUENCIES;
 
   let enabled = false;
   let frequency = DEFAULT_FREQUENCY;
@@ -151,7 +155,7 @@ function createIdleActivityController(options = {}) {
   }
 
   function schedule(first) {
-    const ranges = IDLE_ACTIVITY_FREQUENCIES[frequency];
+    const ranges = frequencies[frequency] || IDLE_ACTIVITY_FREQUENCIES[frequency];
     const [min, max] = first ? ranges.first : ranges.repeat;
     nextAt = now() + min + Math.floor(random() * Math.max(1, max - min));
   }

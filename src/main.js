@@ -351,7 +351,12 @@ const SIZES = {
 // `_settingsController.applyUpdate()`, which auto-persists.
 const prefsModule = require("./prefs");
 // desk-pet: fork switch + first-run defaults (see src/desk-pet-edition.js).
-const { DESK_PET_EDITION, applyDeskPetToLoadResult, gateUpdaterForDeskPet } = require("./desk-pet-edition");
+const {
+  DESK_PET_EDITION,
+  DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
+  applyDeskPetToLoadResult,
+  gateUpdaterForDeskPet,
+} = require("./desk-pet-edition");
 const { createSettingsController } = require("./settings-controller");
 const { loadOrCreateInstallationIdentity } = require("./remote-ssh-identity");
 const { createTranslator, i18n, SUPPORTED_LANGS } = require("./i18n");
@@ -6047,6 +6052,8 @@ function canPlayIdleActivity() {
 }
 
 const _idleActivity = require("./idle-activity").createIdleActivityController({
+  // desk-pet: tighter spacing so the pet is rarely idle for long.
+  frequencies: DESK_PET_EDITION ? DESK_PET_IDLE_ACTIVITY_FREQUENCIES : undefined,
   getTheme: () => getActiveTheme(),
   getCurrentState: () => _state.getCurrentState(),
   canPlay: canPlayIdleActivity,

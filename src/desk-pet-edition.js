@@ -15,6 +15,15 @@
 
 const DESK_PET_EDITION = true;
 
+// Idle-activity spacing for the standalone pet (ms). Tighter than upstream's
+// scale, which is tuned to sit quietly beside a coding agent, so the pet is
+// rarely idle for long. Same keys as Settings → Pet → How often.
+const DESK_PET_IDLE_ACTIVITY_FREQUENCIES = Object.freeze({
+  low: Object.freeze({ first: Object.freeze([20000, 30000]), repeat: Object.freeze([45000, 75000]) }),
+  medium: Object.freeze({ first: Object.freeze([10000, 15000]), repeat: Object.freeze([20000, 35000]) }),
+  high: Object.freeze({ first: Object.freeze([5000, 10000]), repeat: Object.freeze([10000, 20000]) }),
+});
+
 // Applied only when prefs fell back to defaults (no file yet, or an unusable
 // one). A returning user's saved choices are never overwritten.
 function applyDeskPetFirstRunDefaults(snapshot) {
@@ -65,6 +74,7 @@ function gateUpdaterForDeskPet(updater) {
 
 module.exports = {
   DESK_PET_EDITION,
+  DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
   applyDeskPetFirstRunDefaults,
   applyDeskPetToLoadResult,
   gateUpdaterForDeskPet,
