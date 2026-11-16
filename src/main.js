@@ -356,6 +356,7 @@ const {
   DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
   applyDeskPetToLoadResult,
   gateUpdaterForDeskPet,
+  enableLoginItemOnce,
 } = require("./desk-pet-edition");
 const { renameForDeskPet } = require("./desk-pet-name");
 const { createSettingsController } = require("./settings-controller");
@@ -819,6 +820,23 @@ function hydrateSystemBackedSettings() {
   if (result && result.status === "error") {
     console.warn("Clawd: openAtLogin hydration failed:", result.message);
   }
+}
+
+// desk-pet: switch Start on Login on by itself, once, the first time Egg Tart
+// runs from /Applications, so she never has to find the setting.
+function maybeEnableDeskPetLoginItem() {
+  if (!DESK_PET_EDITION || !isMac) return;
+  const markerPath = path.join(app.getPath("userData"), "desk-pet-login-item.json");
+  void enableLoginItemOnce({
+    markerExists: () => fs.existsSync(markerPath),
+    isInApplicationsFolder: () => typeof app.isInApplicationsFolder === "function" && app.isInApplicationsFolder(),
+    enable: () => _settingsController.applyUpdate("openAtLogin", true),
+    writeMarker: () => fs.writeFileSync(markerPath, JSON.stringify({ enabledAt: new Date().toISOString() }) + "\n"),
+  }).then((outcome) => {
+    console.log(`Clawd: desk-pet Start on Login: ${outcome}`);
+  }).catch((err) => {
+    console.warn("Clawd: desk-pet Start on Login failed:", err && err.message);
+  });
 }
 
 // First-run only: seed the UI language from the device locale. A brand-new
@@ -6312,6 +6330,8 @@ if (!gotTheLock) {
     // Must run before createWindow() so the first menu draw sees the
     // hydrated value rather than the schema default.
     hydrateSystemBackedSettings();
+    // desk-pet: after hydration, so the system's real value is known first.
+    maybeEnableDeskPetLoginItem();
     // First-run only: seed UI language from the device locale, before createWindow
     // so the very first menu/tray render is already in the user's language.
     hydrateFreshInstallLanguage();

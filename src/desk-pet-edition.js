@@ -73,8 +73,27 @@ function gateUpdaterForDeskPet(updater) {
   };
 }
 
+// Turn on Start on Login by itself, once, the first time the app runs from
+// the Applications folder (a login item pointing into the .dmg would break
+// once it is ejected). The marker makes it one-time, so turning the setting
+// off later sticks. Returns "enabled" | "already" | "not-installed" | "failed".
+async function enableLoginItemOnce({ markerExists, isInApplicationsFolder, enable, writeMarker }) {
+  if (markerExists()) return "already";
+  if (!isInApplicationsFolder()) return "not-installed";
+  let result;
+  try {
+    result = await enable();
+  } catch {
+    return "failed";
+  }
+  if (result && result.status === "error") return "failed";
+  writeMarker();
+  return "enabled";
+}
+
 module.exports = {
   DESK_PET_EDITION,
+  enableLoginItemOnce,
   DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
   applyDeskPetFirstRunDefaults,
   applyDeskPetToLoadResult,
