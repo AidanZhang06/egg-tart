@@ -203,6 +203,17 @@ module.exports = function initMenu(ctx) {
     };
   }
 
+  // desk-pet: one-click switch for free roam (walking around the desktop).
+  // Idle activities keep playing either way; Settings → Pet has the full choice.
+  function buildWalkAroundMenuItem() {
+    return {
+      label: t("walkAround"),
+      type: "checkbox",
+      checked: ctx.freeRoam === true,
+      click: (menuItem) => { ctx.freeRoam = menuItem.checked; },
+    };
+  }
+
   function buildBringToPrimaryDisplayMenuItem() {
     return {
       label: t("bringPetToPrimaryDisplay"),
@@ -250,6 +261,10 @@ module.exports = function initMenu(ctx) {
     // for the tray's larger item set: state / noise / work / system / app /
     // quit. Other settings (language, theme, bubble follow, start-with-Claude,
     // updates, etc.) live only in the Settings panel / About tab.
+    // desk-pet: the standalone pet build has no agents, so it drops the
+    // bubble/dashboard/permission/update items (see src/desk-pet-edition.js).
+    const deskPet = ctx.deskPetEdition === true;
+
     const stateGroup = [
       {
         label: ctx.doNotDisturb ? t("wake") : t("sleep"),
@@ -257,10 +272,7 @@ module.exports = function initMenu(ctx) {
       },
       buildMiniModeMenuItem(),
     ];
-
-    // desk-pet: the standalone pet build has no agents, so it drops the
-    // bubble/dashboard/permission/update items (see src/desk-pet-edition.js).
-    const deskPet = ctx.deskPetEdition === true;
+    if (deskPet) stateGroup.push(buildWalkAroundMenuItem());
 
     // Quick noise toggles (bubbles + sound) kept together.
     const noiseGroup = [
@@ -570,6 +582,7 @@ module.exports = function initMenu(ctx) {
         click: () => ctx.doNotDisturb ? ctx.disableDoNotDisturb() : ctx.enableDoNotDisturb(),
       },
     ];
+    if (deskPet) stateGroup.push(buildWalkAroundMenuItem());
 
     const workGroup = deskPet ? [] : [
       {

@@ -4774,6 +4774,9 @@ const _menuCtx = {
   set autoStartWithClaude(v) { _settingsController.applyUpdate("autoStartWithClaude", v); },
   get openAtLogin() { return openAtLogin; },
   set openAtLogin(v) { _settingsController.applyUpdate("openAtLogin", v); },
+  // desk-pet: the menus' Walk Around checkbox.
+  get freeRoam() { return _settingsController.get("freeRoam") === true; },
+  set freeRoam(v) { _settingsController.applyUpdate("freeRoam", v === true); },
   get bubbleFollowPet() { return bubbleFollowPet; },
   set bubbleFollowPet(v) { _settingsController.applyUpdate("bubbleFollowPet", v); },
   get hideBubbles() { return getAllBubblesHidden(); },
@@ -6002,6 +6005,8 @@ _roam.setConstrainAxis(_settingsController.get("roamConstrainAxis") === true);
 try {
   _settingsController.subscribeKey("freeRoam", (value) => {
     _roam.setEnabled(value === true);
+    // desk-pet: keep the menus' Walk Around checkbox in step with Settings.
+    try { rebuildAllMenus(); } catch (err) { console.warn("Clawd: menu rebuild after freeRoam failed:", err && err.message); }
   });
   _settingsController.subscribeKey("roamConstrainAxis", (value) => {
     _roam.setConstrainAxis(value === true);

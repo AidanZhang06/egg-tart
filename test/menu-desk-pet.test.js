@@ -134,3 +134,34 @@ describe("desk pet menu templates", () => {
     }
   });
 });
+
+describe("desk pet walk-around toggle", () => {
+  function findWalk(template) {
+    return template.find((item) => item && item.label === t("walkAround"));
+  }
+
+  it("shows a Walk Around checkbox in both menus that mirrors and changes free roam", () => {
+    for (const walking of [true, false]) {
+      const initMenu = loadMenu();
+      const ctx = buildCtx({ deskPetEdition: true, freeRoam: walking });
+      const menu = initMenu(ctx);
+      menu.createTray();
+      menu.buildContextMenu();
+      for (const template of [ctx.tray.contextMenu.template, ctx.contextMenu.template]) {
+        const item = findWalk(template);
+        assert.ok(item, "Walk Around item present");
+        assert.equal(item.type, "checkbox");
+        assert.equal(item.checked, walking);
+        item.click({ checked: !walking });
+        assert.equal(ctx.freeRoam, !walking);
+        ctx.freeRoam = walking;
+      }
+    }
+  });
+
+  it("is not added to the upstream menus", () => {
+    const { tray, context } = buildBoth({ freeRoam: true });
+    assert.ok(!tray.includes(t("walkAround")));
+    assert.ok(!context.includes(t("walkAround")));
+  });
+});
