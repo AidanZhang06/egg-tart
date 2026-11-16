@@ -31,7 +31,15 @@ describe("listIdleVisualOptions", () => {
       clawd: ["clawd-idle-follow.svg", "clawd-idle-look.svg", "clawd-idle-bubble.svg", "clawd-idle-reading.svg"],
       cloudling: ["cloudling-idle.svg", "cloudling-idle-reading.svg"],
       // desk-pet: built-in Egg Tart theme; its hobby scenes are idle animations.
-      "egg-tart": ["idle.svg", "hobby-crochet.svg", "hobby-reading.svg", "hobby-music.svg"],
+      "egg-tart": [
+        "idle.svg",
+        "hobby-crochet.svg", "hobby-reading.svg", "hobby-music.svg", "hobby-bubbletea.svg",
+        "hobby-science.svg", "hobby-painting.svg", "hobby-gardening.svg",
+        "sign-keep-going.svg", "sign-you-got-this.svg", "sign-youre-amazing.svg", "sign-proud-of-you.svg",
+        "sign-youre-doing-great.svg", "sign-i-believe-in-you.svg", "sign-one-step-at-a-time.svg",
+        "sign-almost-there.svg", "sign-take-a-little-break.svg", "sign-drink-some-water.svg",
+        "sign-you-make-me-smile.svg", "sign-best-girlfriend-ever.svg",
+      ],
       template: ["idle-follow.svg", "idle-look.gif"],
     };
     const themesDir = path.join(__dirname, "..", "themes");

@@ -1,0 +1,54 @@
+{
+  "loopMs": 2000,
+  "riseMs": 550,
+  "signs": [
+    {
+      "file": "sign-keep-going.svg",
+      "phrase": "Keep going!"
+    },
+    {
+      "file": "sign-you-got-this.svg",
+      "phrase": "You got this!"
+    },
+    {
+      "file": "sign-youre-amazing.svg",
+      "phrase": "You're amazing!"
+    },
+    {
+      "file": "sign-proud-of-you.svg",
+      "phrase": "Proud of you ♥"
+    },
+    {
+      "file": "sign-youre-doing-great.svg",
+      "phrase": "You're doing great!"
+    },
+    {
+      "file": "sign-i-believe-in-you.svg",
+      "phrase": "I believe in you!"
+    },
+    {
+      "file": "sign-one-step-at-a-time.svg",
+      "phrase": "One step at a time"
+    },
+    {
+      "file": "sign-almost-there.svg",
+      "phrase": "Almost there!"
+    },
+    {
+      "file": "sign-take-a-little-break.svg",
+      "phrase": "Take a little break?"
+    },
+    {
+      "file": "sign-drink-some-water.svg",
+      "phrase": "Drink some water!"
+    },
+    {
+      "file": "sign-you-make-me-smile.svg",
+      "phrase": "You make me smile ♥"
+    },
+    {
+      "file": "sign-best-girlfriend-ever.svg",
+      "phrase": "Best girlfriend ever ♥"
+    }
+  ]
+}

@@ -14,6 +14,10 @@
 >
 > After that it opens normally. To have it there every day, turn on **Start on Login** from its menu-bar icon.
 >
+> **The pet:** a Sunny Side egg tart (`themes/egg-tart`). It has its own animation for every state, plus hobby scenes and encouragement signs in the random rotation. Clawd, Calico and Cloudling are still available under Settings → Theme.
+>
+> **Changing the sign phrases:** edit the list on the art side so the sign SVGs and `signs.json` regenerate, then run `npm run sync:egg-tart -- <art-folder>`. That copies new signs, deletes removed ones and updates `theme.json`. Rebuild afterwards.
+>
 > Everything below is the original project's README.
 
 <p align="center">

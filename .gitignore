@@ -140,6 +140,8 @@ scripts/apt/__pycache__/
 !scripts/generate-mac-tray-icons.js
 !scripts/generate-readme-contributors.js
 !scripts/update-official-theme-catalog-snapshot.js
+# desk-pet: keeps themes/egg-tart in step with the art folder
+!scripts/sync-egg-tart-theme.js
 !scripts/manual/
 scripts/manual/*
 !scripts/manual/README.md

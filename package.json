@@ -28,6 +28,7 @@
     "verify:release": "node scripts/verify-release-version.js && node scripts/verify-release-contributors.js",
     "generate:readme-contributors": "node scripts/generate-readme-contributors.js",
     "create-theme": "node scripts/create-theme.js",
+    "sync:egg-tart": "node scripts/sync-egg-tart-theme.js",
     "export-agent-icons": "node scripts/export-agent-icons.js",
     "install:claude-hooks": "node hooks/install.js",
     "uninstall:claude-hooks": "node hooks/uninstall.js",

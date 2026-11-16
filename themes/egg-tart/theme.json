@@ -116,6 +116,86 @@
       "file": "hobby-music.svg",
       "duration": 8000,
       "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-bubbletea.svg",
+      "duration": 8000,
+      "mirrorOnRightSide": false
+    },
+    {
+      "file": "hobby-science.svg",
+      "duration": 8000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-painting.svg",
+      "duration": 8000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-gardening.svg",
+      "duration": 8000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "sign-keep-going.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-you-got-this.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-youre-amazing.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-proud-of-you.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-youre-doing-great.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-i-believe-in-you.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-one-step-at-a-time.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-almost-there.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-take-a-little-break.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-drink-some-water.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-you-make-me-smile.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
+    },
+    {
+      "file": "sign-best-girlfriend-ever.svg",
+      "duration": 8550,
+      "activityGroup": "signs"
     }
   ],
   "sleepSequence": {

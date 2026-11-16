@@ -54,19 +54,44 @@ describe("egg tart theme", () => {
     assert.equal(new Set(files).size, files.length, "activity states must not share a file");
   });
 
-  it("plays its hobby scenes in the activity rotation for whole loops, mirrored near the right edge", () => {
+  it("plays its hobby scenes in the activity rotation for whole loops", () => {
     const theme = loadTheme();
     const hobbies = listIdleActivityCandidates(theme)
       .filter((candidate) => candidate.files[0].startsWith("hobby-"))
       .map((candidate) => [candidate.files[0], candidate.duration]);
-    // 4.8 s loops play twice (9.6 s); the 4 s music loop plays twice (8 s).
+    // 4.8 s loops play twice (9.6 s); 4 s loops play twice (8 s).
     assert.deepEqual(hobbies, [
       ["hobby-crochet.svg", 9600],
       ["hobby-reading.svg", 9600],
       ["hobby-music.svg", 8000],
+      ["hobby-bubbletea.svg", 8000],
+      ["hobby-science.svg", 8000],
+      ["hobby-painting.svg", 8000],
+      ["hobby-gardening.svg", 8000],
     ]);
-    for (const entry of theme.idleAnimations) {
-      assert.equal(entry.mirrorOnRightSide, true, `${entry.file} reaches right, so it must mirror on the right side`);
+    // Scenes whose effects reach right mirror near the right screen edge;
+    // bubble tea's heart floats up-left, so it never needs to.
+    const mirrored = theme.idleAnimations
+      .filter((entry) => entry.mirrorOnRightSide === true)
+      .map((entry) => entry.file);
+    assert.deepEqual(mirrored, [
+      "hobby-crochet.svg", "hobby-reading.svg", "hobby-music.svg",
+      "hobby-science.svg", "hobby-painting.svg", "hobby-gardening.svg",
+    ]);
+  });
+
+  it("holds up every encouragement sign from signs.json as one rotation slot", () => {
+    const theme = loadTheme();
+    const listed = JSON.parse(fs.readFileSync(path.join(THEME_DIR, "signs.json"), "utf8")).signs.map((s) => s.file);
+    assert.ok(listed.length > 0);
+    const signSlots = listIdleActivityCandidates(theme).filter((candidate) => candidate.files[0].startsWith("sign-"));
+    assert.equal(signSlots.length, 1, "all signs share one slot so they cannot crowd out the hobbies");
+    assert.deepEqual(signSlots[0].files, listed);
+    assert.equal(signSlots[0].duration, 8550);
+    const shipped = fs.readdirSync(ASSETS_DIR).filter((file) => file.startsWith("sign-")).sort();
+    assert.deepEqual(shipped, [...listed].sort(), "no stale or missing sign files");
+    for (const entry of theme.idleAnimations.filter((e) => e.file.startsWith("sign-"))) {
+      assert.notEqual(entry.mirrorOnRightSide, true, `${entry.file} has text and must never mirror`);
     }
   });
 
