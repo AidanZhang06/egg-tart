@@ -35,11 +35,15 @@
       28% { transform: scaleX(0.75); opacity: 0.55; }
       68% { transform: scaleX(0.88); opacity: 0.8; }
       }
+      /* the opposite of bl-lift's tilt, plus a small wiggle, so the string stays pointing straight up */
       @keyframes bl-sway {
-      0%, 100% { transform: rotate(-7deg); }
-      22% { transform: rotate(5deg) translateY(-0.6px); }
-      50% { transform: rotate(-9deg); }
-      72% { transform: rotate(3deg) translateY(-0.4px); }
+      0%, 100% { transform: rotate(3deg); }
+      16% { transform: rotate(-7deg); }
+      28% { transform: rotate(-5.5deg); }
+      44% { transform: rotate(-1.8deg); }
+      50% { transform: rotate(5deg); }
+      68% { transform: rotate(-3.5deg); }
+      82% { transform: rotate(4deg); }
       }
       @keyframes bl-wobble { 0%, 100% { transform: scale(1, 1); } 30% { transform: scale(1.04, 0.97); } 65% { transform: scale(0.97, 1.03); } }
       @keyframes bl-flail { 0%, 100% { transform: translateY(-1.5px) rotate(30deg); } 50% { transform: translateY(-0.5px) rotate(-25deg); } }
@@ -56,9 +60,9 @@
   <g class="shadow"><rect x="3" y="20" width="14" height="1" fill="#000" opacity="0.5"/></g>
   <g class="lift"><g class="squash">
   <g class="float-up"><g class="sway">
-  <polyline class="free" points="13.8,-0.2 19.7,6.3" fill="none" stroke="#6B4A3A" stroke-width="0.32" stroke-linecap="round" shape-rendering="geometricPrecision"/>
-  <rect class="free" x="13.35" y="-0.8" width="0.9" height="0.7" fill="#A52D50"/>
-  <g class="wobble"><g transform="translate(6.3 -12.6) scale(0.6)">
+  <polyline class="free" points="19.7,-0.2 19.7,6.3" fill="none" stroke="#6B4A3A" stroke-width="0.32" stroke-linecap="round" shape-rendering="geometricPrecision"/>
+  <rect class="free" x="19.25" y="-0.8" width="0.9" height="0.7" fill="#A52D50"/>
+  <g class="wobble"><g transform="translate(12.2 -12.6) scale(0.6)">
   <rect x="5" y="0" width="6" height="1" fill="#A52D50"/>
   <rect x="14" y="0" width="6" height="1" fill="#A52D50"/>
   <rect x="3" y="1" width="2" height="1" fill="#A52D50"/>
