@@ -214,6 +214,27 @@ module.exports = function initMenu(ctx) {
     };
   }
 
+  // desk-pet: preset pet sizes (percent of the screen's longer side); the
+  // Settings → Pet slider still allows any size in between.
+  const DESK_PET_SIZES = [
+    ["petSizeSmall", "P:6"],
+    ["petSizeMedium", "P:9"],
+    ["petSizeLarge", "P:13"],
+    ["petSizeExtraLarge", "P:18"],
+  ];
+
+  function buildPetSizeMenuItem() {
+    return {
+      label: t("size"),
+      submenu: DESK_PET_SIZES.map(([labelKey, sizeKey]) => ({
+        label: t(labelKey),
+        type: "radio",
+        checked: ctx.currentSize === sizeKey,
+        click: () => resizeWindow(sizeKey),
+      })),
+    };
+  }
+
   function buildBringToPrimaryDisplayMenuItem() {
     return {
       label: t("bringPetToPrimaryDisplay"),
@@ -272,7 +293,7 @@ module.exports = function initMenu(ctx) {
       },
       buildMiniModeMenuItem(),
     ];
-    if (deskPet) stateGroup.push(buildWalkAroundMenuItem());
+    if (deskPet) stateGroup.push(buildWalkAroundMenuItem(), buildPetSizeMenuItem());
 
     // Quick noise toggles (bubbles + sound) kept together.
     const noiseGroup = [
@@ -582,7 +603,7 @@ module.exports = function initMenu(ctx) {
         click: () => ctx.doNotDisturb ? ctx.disableDoNotDisturb() : ctx.enableDoNotDisturb(),
       },
     ];
-    if (deskPet) stateGroup.push(buildWalkAroundMenuItem());
+    if (deskPet) stateGroup.push(buildWalkAroundMenuItem(), buildPetSizeMenuItem());
 
     const workGroup = deskPet ? [] : [
       {

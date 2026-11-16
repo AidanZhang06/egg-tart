@@ -165,3 +165,62 @@ describe("desk pet walk-around toggle", () => {
     assert.ok(!context.includes(t("walkAround")));
   });
 });
+
+describe("desk pet size menu", () => {
+  const PRESETS = [
+    ["petSizeSmall", "P:6"],
+    ["petSizeMedium", "P:9"],
+    ["petSizeLarge", "P:13"],
+    ["petSizeExtraLarge", "P:18"],
+  ];
+
+  function sizeCtx(overrides = {}) {
+    const applied = [];
+    const ctx = buildCtx({
+      deskPetEdition: true,
+      currentSize: "P:9",
+      getPixelSizeFor: (key) => ({ width: Number(key.slice(2)) * 10, height: Number(key.slice(2)) * 10 }),
+      miniHandleResize: () => false,
+      getPetWindowBounds: () => ({ x: 100, y: 100, width: 90, height: 90 }),
+      clampToScreenVisual: (x, y) => ({ x, y }),
+      applyPetWindowBounds: (bounds) => applied.push(bounds),
+      syncHitWin() {},
+      repositionBubbles() {},
+      flushRuntimeStateToPrefs() {},
+      ...overrides,
+    });
+    return { ctx, applied };
+  }
+
+  it("offers Small, Medium, Large and Extra Large in both menus, checking the current size", () => {
+    const initMenu = loadMenu();
+    const { ctx } = sizeCtx({ currentSize: "P:13" });
+    const menu = initMenu(ctx);
+    menu.createTray();
+    menu.buildContextMenu();
+    for (const template of [ctx.tray.contextMenu.template, ctx.contextMenu.template]) {
+      const sizeItem = template.find((item) => item && item.label === t("size"));
+      assert.ok(sizeItem && Array.isArray(sizeItem.submenu), "Size submenu present");
+      assert.deepEqual(sizeItem.submenu.map((item) => item.label), PRESETS.map(([key]) => t(key)));
+      assert.ok(sizeItem.submenu.every((item) => item.type === "radio"));
+      assert.deepEqual(sizeItem.submenu.map((item) => item.checked), [false, false, true, false]);
+    }
+  });
+
+  it("resizes and saves the chosen size", () => {
+    const initMenu = loadMenu();
+    const { ctx, applied } = sizeCtx();
+    const menu = initMenu(ctx);
+    menu.buildContextMenu();
+    const sizeItem = ctx.contextMenu.template.find((item) => item && item.label === t("size"));
+    sizeItem.submenu.find((item) => item.label === t("petSizeExtraLarge")).click();
+    assert.equal(ctx.currentSize, "P:18");
+    assert.deepEqual(applied.at(-1), { x: 100, y: 100, width: 180, height: 180 });
+  });
+
+  it("is not added to the upstream menus", () => {
+    const { tray, context } = buildBoth({});
+    assert.ok(!tray.includes(t("size")));
+    assert.ok(!context.includes(t("size")));
+  });
+});
