@@ -1356,6 +1356,45 @@ describe("tick unattended roam sleep (#1202)", () => {
     assert.deepStrictEqual(statesSeen, ["idle-animation"], "the idle animation must stay consumed for this unattended period");
   });
 
+  // desk-pet: an activityGroup (e.g. encouragement signs) is one entry in the
+  // idle-look pool and plays a random member when picked.
+  for (const [label, rolls, expected] of [
+    ["counts a grouped set once in the pool", [0.6], "hobby-read.svg"],
+    ["plays a random member of a grouped set", [0.1, 0.9], "sign-c.svg"],
+  ]) {
+    it(`idle look ${label}`, () => {
+      const theme = cloneTheme(_defaultTheme);
+      theme.idleAnimations = [
+        { file: "sign-a.svg", duration: 5000, activityGroup: "signs" },
+        { file: "sign-b.svg", duration: 5000, activityGroup: "signs" },
+        { file: "sign-c.svg", duration: 5000, activityGroup: "signs" },
+        { file: "hobby-read.svg", duration: 5000 },
+      ];
+      theme.timings.mouseIdleTimeout = 60;
+      theme.timings.mouseSleepTimeout = 100000;
+      ctx = makeCtx(theme, statesSeen);
+      const queue = [...rolls];
+      ctx.random = () => (queue.length ? queue.shift() : 0);
+      const played = [];
+      let visualGeneration = 0;
+      ctx.sendToRenderer = (channel, state, svg, options) => {
+        if (channel !== "state-change") return;
+        ctx.currentSvg = svg;
+        const request = { visualGeneration: ++visualGeneration };
+        if (state === "idle" && svg !== theme.states.idle[0]) played.push(svg);
+        if (options && typeof options.onLogicalSettlement === "function") {
+          options.onLogicalSettlement({ status: "committed", visualGeneration: request.visualGeneration });
+        }
+        return request;
+      };
+      tickApi = loader.initTick(ctx);
+      tickApi.startMainTick();
+      mock.timers.tick(1);
+      for (let i = 0; i < 20 && played.length === 0; i++) mock.timers.tick(50);
+      assert.deepStrictEqual(played, [expected]);
+    });
+  }
+
   it("starts a fresh unattended period when another state returns to idle", () => {
     const theme = cloneTheme(_defaultTheme);
     ctx = makeCtx(theme, statesSeen);

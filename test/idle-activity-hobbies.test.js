@@ -109,3 +109,41 @@ test("clamps hobby durations to 2–15 s", () => {
   short.clock.advance(2000);
   assert.deepEqual(short.restores, [shortStart + 2000]);
 });
+
+const GROUPED_THEME = {
+  states: { idle: ["idle.svg"], thinking: ["think.svg"] },
+  idleAnimations: [
+    { file: "sign-a.svg", duration: 8000, activityGroup: "signs" },
+    { file: "hobby-read.svg", duration: 9600 },
+    { file: "sign-b.svg", duration: 8000, activityGroup: "signs" },
+  ],
+};
+
+test("entries sharing an activityGroup collapse into one candidate", () => {
+  assert.deepEqual(listIdleActivityCandidates(GROUPED_THEME), [
+    { state: "thinking", files: ["think.svg"] },
+    { state: "idle", files: ["sign-a.svg", "sign-b.svg"], duration: 8000 },
+    { state: "idle", files: ["hobby-read.svg"], duration: 9600 },
+  ]);
+});
+
+test("a grouped candidate plays a random member", () => {
+  const clock = fakeClock();
+  const sent = [];
+  const controller = createIdleActivityController({
+    getTheme: () => GROUPED_THEME,
+    getCurrentState: () => "idle",
+    canPlay: () => true,
+    isVisualGenerationCurrent: () => true,
+    sendToRenderer: (...args) => { sent.push(args); return { visualGeneration: 1 }; },
+    random: () => 0.5, // candidate 1 of 3 → the sign group; member 1 of 2 → sign-b
+    now: clock.now,
+    setTimeout: clock.setTimeout,
+    clearTimeout: clock.clearTimeout,
+  });
+  controller.setEnabled(true);
+  controller.tick();
+  clock.advance(IDLE_ACTIVITY_FREQUENCIES.medium.first[1]);
+  controller.tick();
+  assert.deepEqual(sent.map((args) => args[2]), ["sign-b.svg"]);
+});

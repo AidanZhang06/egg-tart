@@ -71,20 +71,37 @@ function listIdleActivityStates(theme) {
 // duration, clamped so a beat is long enough to read but never takes over.
 const MAX_IDLE_ANIMATION_DURATION_MS = 15000;
 
+// Entries that share an `activityGroup` (e.g. a set of encouragement signs)
+// collapse into one pool entry, weighted like a single animation, that plays a
+// random member each time it comes up. The group takes its first member's
+// position and duration. Shared with tick.js's idle-look pool.
+function groupIdleAnimations(entries, { excludeFile = null } = {}) {
+  const groups = [];
+  const byName = new Map();
+  for (const entry of Array.isArray(entries) ? entries : []) {
+    if (!entry || typeof entry.file !== "string" || !entry.file || entry.file === excludeFile) continue;
+    const name = typeof entry.activityGroup === "string" && entry.activityGroup ? entry.activityGroup : null;
+    if (name && byName.has(name)) {
+      byName.get(name).files.push(entry.file);
+      continue;
+    }
+    const group = { files: [entry.file], duration: entry.duration };
+    groups.push(group);
+    if (name) byName.set(name, group);
+  }
+  return groups;
+}
+
 function listIdleAnimationCandidates(theme) {
-  const entries = theme && Array.isArray(theme.idleAnimations) ? theme.idleAnimations : [];
   const states = theme && theme.states;
   // The follow sprite is the resting visual itself; "playing" it is a no-op.
   const followFile = states && Array.isArray(states.idle) ? states.idle[0] : null;
-  const result = [];
-  for (const entry of entries) {
-    if (!entry || typeof entry.file !== "string" || !entry.file || entry.file === followFile) continue;
-    const declared = Number(entry.duration);
+  return groupIdleAnimations(theme && theme.idleAnimations, { excludeFile: followFile }).map((group) => {
+    const declared = Number(group.duration);
     const base = Number.isFinite(declared) && declared > 0 ? declared : DEFAULT_DURATION_MS;
     const duration = Math.min(MAX_IDLE_ANIMATION_DURATION_MS, Math.max(MIN_DURATION_MS, Math.round(base)));
-    result.push({ state: "idle", files: [entry.file], duration });
-  }
-  return result;
+    return { state: "idle", files: group.files, duration };
+  });
 }
 
 function listIdleActivityCandidates(theme) {
@@ -283,6 +300,7 @@ module.exports = {
   createIdleActivityController,
   listIdleActivityStates,
   listIdleActivityCandidates,
+  groupIdleAnimations,
   normalizeFrequency,
   pickDuration,
 };

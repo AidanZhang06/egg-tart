@@ -2,6 +2,7 @@
 // Extracted from main.js L527-689
 
 const { screen } = require("electron");
+const { groupIdleAnimations } = require("./idle-activity");
 
 module.exports = function initTick(ctx) {
 
@@ -68,7 +69,10 @@ function refreshTheme() {
   MOUSE_IDLE_TIMEOUT = theme.timings.mouseIdleTimeout;
   MOUSE_SLEEP_TIMEOUT = theme.timings.mouseSleepTimeout;
   SVG_IDLE_FOLLOW = theme.states.idle[0];
-  IDLE_ANIMS = (theme.idleAnimations || []).map(a => ({ svg: a.file, duration: a.duration }));
+  // desk-pet: an activityGroup (e.g. encouragement signs) is ONE pool entry
+  // that plays a random member, so a big set cannot crowd out the rest.
+  IDLE_ANIMS = groupIdleAnimations(theme.idleAnimations)
+    .map((group) => ({ svg: group.files[0], svgs: group.files, duration: group.duration }));
   IDLE_EASTER_EGGS = (theme.idleEasterEggs || []).map((egg) => ({
     svg: egg.file,
     duration: egg.duration,
@@ -456,7 +460,12 @@ function runMainTickOnce() {
         && elapsed >= MOUSE_IDLE_TIMEOUT
       ) {
         const choice = typeof ctx.getIdleVisualChoice === "function" ? ctx.getIdleVisualChoice() : null;
-        const pool = choice ? IDLE_ANIMS.filter((a) => a.svg !== choice) : IDLE_ANIMS;
+        const pool = choice
+          ? IDLE_ANIMS
+            .map((a) => ({ ...a, svgs: a.svgs.filter((svg) => svg !== choice) }))
+            .filter((a) => a.svgs.length > 0)
+            .map((a) => ({ ...a, svg: a.svgs[0] }))
+          : IDLE_ANIMS;
         const easterEgg = chooseIdleEasterEgg();
         if (!easterEgg && pool.length === 0) {
           idleLookPlayed = true;
@@ -465,6 +474,11 @@ function runMainTickOnce() {
         isMouseIdle = true;
         idleLookPlayed = true;
         const pick = easterEgg || pool[Math.floor(random() * pool.length)];
+        // Only a multi-file group spends a second roll, so upstream single-file
+        // picks keep their exact random sequence.
+        const pickSvg = pick.svgs && pick.svgs.length > 1
+          ? pick.svgs[Math.min(pick.svgs.length - 1, Math.floor(random() * pick.svgs.length))]
+          : pick.svg;
         if (!shouldSuppressPassiveIpc()) ctx.sendToRenderer("eye-move", 0, 0);
         yawnDelayTimer = setTimeout(() => {
           yawnDelayTimer = null;
@@ -508,7 +522,7 @@ function runMainTickOnce() {
                 pick.duration
               );
             };
-            const request = ctx.sendToRenderer("state-change", "idle", pick.svg, {
+            const request = ctx.sendToRenderer("state-change", "idle", pickSvg, {
               onLogicalSettlement,
             });
             if (idleLookAttempt !== attempt) return;
