@@ -40,8 +40,9 @@ function applyDeskPetFirstRunDefaults(snapshot) {
     theme: "egg-tart",
     freeRoam: true,
     idleActivities: true,
-    // "high" so the pet is rarely idle for long; the desk pet's own,
-    // tighter frequency scale lives in DESK_PET_IDLE_ACTIVITY_FREQUENCIES.
+    // "high" = an activity every 10–20 s on the desk pet's own scale
+    // (DESK_PET_IDLE_ACTIVITY_FREQUENCIES), so it is rarely idle for long.
+    // Adjustable in Settings → Pet → How often.
     idleActivityFrequency: "high",
     manageClaudeHooksAutomatically: false,
     autoStartWithClaude: false,

@@ -25,8 +25,8 @@ const SIGN_GROUP = "signs";
 const SIGN_FILE_RE = /^sign-[a-z0-9]+(?:-[a-z0-9]+)*\.svg$/;
 const SIGN_KIND_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ASSET_FILE_RE = /^[a-z0-9][a-z0-9-]*\.svg$/;
-// Rise once, then sway whole loops for about 8 s, ending on a loop boundary.
-const SIGN_TARGET_MS = 8000;
+// Rise once, then sway whole loops for about 12 s, ending on a loop boundary.
+const SIGN_TARGET_MS = 12000;
 
 function signDuration({ loopMs, riseMs }) {
   const loop = Number.isFinite(loopMs) && loopMs > 0 ? loopMs : 2000;
