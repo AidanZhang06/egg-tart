@@ -8,6 +8,7 @@ const {
   DESK_PET_EDITION,
   applyDeskPetFirstRunDefaults,
   applyDeskPetToLoadResult,
+  gateUpdaterForDeskPet,
 } = require("../src/desk-pet-edition");
 
 describe("desk pet edition", () => {
@@ -79,5 +80,45 @@ describe("desk pet load-result seeding", () => {
       const loadResult = { snapshot: prefs.getDefaults(), ...flags };
       assert.strictEqual(applyDeskPetToLoadResult(loadResult), loadResult, JSON.stringify(flags));
     }
+  });
+});
+
+describe("desk pet updater gate", () => {
+  function fakeUpdater(calls) {
+    const record = (name, value) => (...args) => { calls.push(name); return value; };
+    return {
+      setupAutoUpdater: record("setupAutoUpdater"),
+      startUpdateScheduler: record("startUpdateScheduler"),
+      stopUpdateScheduler: record("stopUpdateScheduler"),
+      checkForUpdates: record("checkForUpdates", Promise.resolve({ state: "available" })),
+      getUpdateMenuItem: record("getUpdateMenuItem", { label: "Check for Updates" }),
+      getUpdateCheckSnapshot: record("getUpdateCheckSnapshot", { state: "idle" }),
+    };
+  }
+
+  it("never reaches the real scheduler, setup, check or menu item", async () => {
+    const calls = [];
+    const gated = gateUpdaterForDeskPet(fakeUpdater(calls));
+    gated.setupAutoUpdater();
+    gated.startUpdateScheduler();
+    assert.deepStrictEqual(await gated.checkForUpdates(true), { state: "idle" });
+    assert.deepStrictEqual(await gated.checkForUpdates({ trigger: "scheduled", intent: "download" }), { state: "idle" });
+    assert.strictEqual(gated.getUpdateMenuItem(), null);
+    assert.deepStrictEqual(calls, []);
+  });
+
+  it("passes through harmless read and stop helpers", () => {
+    const calls = [];
+    const gated = gateUpdaterForDeskPet(fakeUpdater(calls));
+    gated.stopUpdateScheduler();
+    assert.deepStrictEqual(gated.getUpdateCheckSnapshot(), { state: "idle" });
+    assert.deepStrictEqual(calls, ["stopUpdateScheduler", "getUpdateCheckSnapshot"]);
+  });
+});
+
+describe("desk pet package config", () => {
+  it("ships no update feed (build.publish is null)", () => {
+    const pkg = require("../package.json");
+    assert.strictEqual(pkg.build.publish, null);
   });
 });

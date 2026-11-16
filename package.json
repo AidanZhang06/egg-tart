@@ -199,7 +199,8 @@
         "from": "assets/icon.ico",
         "to": "icon.ico"
       }
-    ]
+    ],
+    "publish": null
   },
   "engines": {
     "node": ">=22.12.0"

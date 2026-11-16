@@ -43,8 +43,25 @@ function applyDeskPetToLoadResult(loadResult) {
   return { ...loadResult, snapshot: applyDeskPetFirstRunDefaults(loadResult.snapshot) };
 }
 
+// The build must never fetch or install an upstream release (it would replace
+// this fork). Wrapping the updater API once closes every route to it: the
+// startup scheduler, the About "automatically check" toggle, the About button
+// and the menu item. package.json also sets build.publish to null so no
+// app-update.yml feed is bundled.
+function gateUpdaterForDeskPet(updater) {
+  if (!DESK_PET_EDITION) return updater;
+  return {
+    ...updater,
+    setupAutoUpdater: () => {},
+    startUpdateScheduler: () => {},
+    checkForUpdates: async () => ({ state: "idle" }),
+    getUpdateMenuItem: () => null,
+  };
+}
+
 module.exports = {
   DESK_PET_EDITION,
   applyDeskPetFirstRunDefaults,
   applyDeskPetToLoadResult,
+  gateUpdaterForDeskPet,
 };

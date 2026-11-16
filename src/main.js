@@ -351,7 +351,7 @@ const SIZES = {
 // `_settingsController.applyUpdate()`, which auto-persists.
 const prefsModule = require("./prefs");
 // desk-pet: fork switch + first-run defaults (see src/desk-pet-edition.js).
-const { DESK_PET_EDITION, applyDeskPetToLoadResult } = require("./desk-pet-edition");
+const { DESK_PET_EDITION, applyDeskPetToLoadResult, gateUpdaterForDeskPet } = require("./desk-pet-edition");
 const { createSettingsController } = require("./settings-controller");
 const { loadOrCreateInstallationIdentity } = require("./remote-ssh-identity");
 const { createTranslator, i18n, SUPPORTED_LANGS } = require("./i18n");
@@ -5206,10 +5206,12 @@ const _updaterCtx = {
     try { _settingsController.applyUpdate(key, value); } catch {}
   },
 };
-const _updater = require("./updater")(_updaterCtx);
+// desk-pet: the updater is gated once here — no scheduler (startup or the
+// About toggle), no checks, no menu item. See src/desk-pet-edition.js.
+const _updater = gateUpdaterForDeskPet(require("./updater")(_updaterCtx));
 const {
   setupAutoUpdater,
-  checkForUpdates: _upstreamCheckForUpdates,
+  checkForUpdates,
   getUpdateCheckSnapshot,
   clearUpdateError,
   getUpdateMenuItem,
@@ -5219,9 +5221,6 @@ const {
   startUpdateScheduler,
   stopUpdateScheduler,
 } = _updater;
-// desk-pet: this build never checks for or installs updates — an upstream
-// release would replace the fork. Manual checks (About tab) become a no-op.
-const checkForUpdates = DESK_PET_EDITION ? async () => ({ state: "idle" }) : _upstreamCheckForUpdates;
 // Now that updater is constructed, point the forward hook at it.
 notifyUpdaterSilentExit = () => { try { updaterOnSilentModeExit(); } catch {} };
 
@@ -6442,10 +6441,7 @@ if (!gotTheLock) {
     // safe in dev mode — reconcile is a no-op when nothing is pending,
     // and startUpdateScheduler() short-circuits on !app.isPackaged.
     try { reconcilePendingOnStartup(); } catch (err) { updateLog(`reconcile failed: ${err && err.message}`); }
-    // desk-pet: no background update checks.
-    if (!DESK_PET_EDITION) {
-      try { startUpdateScheduler(); } catch (err) { updateLog(`scheduler start failed: ${err && err.message}`); }
-    }
+    try { startUpdateScheduler(); } catch (err) { updateLog(`scheduler start failed: ${err && err.message}`); }
 
     // Deferred so any startup Codex hook sync has settled before we read the
     // on-disk hook state; unref'd so it never blocks a fast quit.
