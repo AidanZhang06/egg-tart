@@ -39,7 +39,7 @@
     ],
     "eyeRatioX": 0.5,
     "eyeRatioY": 0.756,
-    "maxOffset": 3,
+    "maxOffset": 2,
     "bodyScale": 0.33,
     "shadowStretch": 0.15,
     "shadowShift": 0.3,

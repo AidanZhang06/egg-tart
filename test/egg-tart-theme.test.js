@@ -136,6 +136,12 @@ describe("egg tart theme", () => {
     }
   });
 
+  it("keeps the tracking eyes clear of the mouth", () => {
+    // tick.js moves #eyes-js up to 0.85×maxOffset sideways and 0.5×maxOffset
+    // down; at 3 the eyes slid onto the mouth, at 2 they keep ~0.8 units clear.
+    assert.equal(loadTheme().eyeTracking.maxOffset, 2);
+  });
+
   it("walks, sleeps, wakes and tracks the cursor with its own art", () => {
     const theme = loadTheme();
     for (const state of ["idle", "roam", "sleeping", "waking"]) {
