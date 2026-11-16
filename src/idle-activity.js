@@ -66,6 +66,31 @@ function listIdleActivityStates(theme) {
   return result;
 }
 
+// desk-pet: a theme's idleAnimations (hobby scenes such as reading or
+// crocheting) also join the random activity pool. Each plays for its declared
+// duration, clamped so a beat is long enough to read but never takes over.
+const MAX_IDLE_ANIMATION_DURATION_MS = 15000;
+
+function listIdleAnimationCandidates(theme) {
+  const entries = theme && Array.isArray(theme.idleAnimations) ? theme.idleAnimations : [];
+  const states = theme && theme.states;
+  // The follow sprite is the resting visual itself; "playing" it is a no-op.
+  const followFile = states && Array.isArray(states.idle) ? states.idle[0] : null;
+  const result = [];
+  for (const entry of entries) {
+    if (!entry || typeof entry.file !== "string" || !entry.file || entry.file === followFile) continue;
+    const declared = Number(entry.duration);
+    const base = Number.isFinite(declared) && declared > 0 ? declared : DEFAULT_DURATION_MS;
+    const duration = Math.min(MAX_IDLE_ANIMATION_DURATION_MS, Math.max(MIN_DURATION_MS, Math.round(base)));
+    result.push({ state: "idle", files: [entry.file], duration });
+  }
+  return result;
+}
+
+function listIdleActivityCandidates(theme) {
+  return [...listIdleActivityStates(theme), ...listIdleAnimationCandidates(theme)];
+}
+
 function pickDuration(theme, state, random) {
   const autoReturn = theme && theme.timings && theme.timings.autoReturn;
   const configured = autoReturn && Number(autoReturn[state]);
@@ -133,12 +158,12 @@ function createIdleActivityController(options = {}) {
 
   function play() {
     const theme = getTheme();
-    const states = listIdleActivityStates(theme);
-    if (states.length === 0) {
+    const candidates = listIdleActivityCandidates(theme);
+    if (candidates.length === 0) {
       nextAt = now() + RETRY_MS;
       return;
     }
-    const state = pickFrom(states, random);
+    const state = pickFrom(candidates, random);
     const svg = pickFrom(state.files, random);
     if (!state || !svg) {
       nextAt = now() + RETRY_MS;
@@ -147,7 +172,7 @@ function createIdleActivityController(options = {}) {
     const attempt = {
       state: state.state,
       svg,
-      duration: pickDuration(theme, state.state, random),
+      duration: Number.isFinite(state.duration) ? state.duration : pickDuration(theme, state.state, random),
       visualGeneration: null,
       committed: false,
     };
@@ -257,6 +282,7 @@ module.exports = {
   EXCLUDED_STATES,
   createIdleActivityController,
   listIdleActivityStates,
+  listIdleActivityCandidates,
   normalizeFrequency,
   pickDuration,
 };
