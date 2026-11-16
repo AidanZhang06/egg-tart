@@ -35,10 +35,9 @@ describe("listIdleVisualOptions", () => {
         "idle.svg",
         "hobby-crochet.svg", "hobby-reading.svg", "hobby-music.svg", "hobby-bubbletea.svg",
         "hobby-science.svg", "hobby-painting.svg", "hobby-gardening.svg",
-        "sign-keep-going.svg", "sign-you-got-this.svg", "sign-youre-amazing.svg", "sign-proud-of-you.svg",
-        "sign-youre-doing-great.svg", "sign-i-believe-in-you.svg", "sign-one-step-at-a-time.svg",
-        "sign-almost-there.svg", "sign-take-a-little-break.svg", "sign-drink-some-water.svg",
-        "sign-you-make-me-smile.svg", "sign-best-girlfriend-ever.svg",
+        // The sign set is edited often, so it is read from the theme's signs.json.
+        ...JSON.parse(fs.readFileSync(path.join(__dirname, "..", "themes", "egg-tart", "signs.json"), "utf8"))
+          .signs.map((sign) => sign.file),
       ],
       template: ["idle-follow.svg", "idle-look.gif"],
     };

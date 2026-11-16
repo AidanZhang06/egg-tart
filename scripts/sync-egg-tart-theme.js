@@ -9,9 +9,11 @@
 // ({ loopMs, riseMs, signs: [{ file, phrase }] }). The script
 //   • refreshes every file theme.json already references (states, reactions,
 //     hobby idleAnimations) when the art folder has a newer copy;
-//   • makes the encouragement signs match signs.json exactly: copies every
-//     listed sign-*.svg, deletes sign-*.svg files no longer listed, and
-//     rewrites the sign entries in theme.json as one activityGroup;
+//   • makes the signs match signs.json exactly: copies every listed
+//     sign-*.svg, deletes sign-*.svg files no longer listed, and rewrites the
+//     sign entries in theme.json. Each sign kind (encouragement, love, …) gets
+//     its own activityGroup "signs-<kind>", so every kind is one rotation slot;
+//     signs without a kind share the group "signs";
 //   • copies signs.json next to theme.json so the phrase list travels along.
 // Hobby entries (durations, mirrorOnRightSide) stay hand-maintained in
 // theme.json. Run `node scripts/validate-theme.js themes/egg-tart` afterwards.
@@ -21,6 +23,7 @@ const path = require("path");
 
 const SIGN_GROUP = "signs";
 const SIGN_FILE_RE = /^sign-[a-z0-9]+(?:-[a-z0-9]+)*\.svg$/;
+const SIGN_KIND_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ASSET_FILE_RE = /^[a-z0-9][a-z0-9-]*\.svg$/;
 // Rise once, then sway whole loops for about 8 s, ending on a loop boundary.
 const SIGN_TARGET_MS = 8000;
@@ -29,6 +32,23 @@ function signDuration({ loopMs, riseMs }) {
   const loop = Number.isFinite(loopMs) && loopMs > 0 ? loopMs : 2000;
   const rise = Number.isFinite(riseMs) && riseMs >= 0 ? riseMs : 0;
   return rise + loop * Math.max(1, Math.round((SIGN_TARGET_MS - rise) / loop));
+}
+
+function isSignEntry(entry) {
+  if (!entry) return false;
+  const group = entry.activityGroup;
+  return (typeof entry.file === "string" && SIGN_FILE_RE.test(entry.file))
+    || group === SIGN_GROUP
+    || (typeof group === "string" && group.startsWith(`${SIGN_GROUP}-`));
+}
+
+function signGroup(sign, kinds) {
+  if (sign.kind === undefined) return SIGN_GROUP;
+  const declared = kinds && typeof kinds === "object" && Object.prototype.hasOwnProperty.call(kinds, sign.kind);
+  if (typeof sign.kind !== "string" || !SIGN_KIND_RE.test(sign.kind) || !declared) {
+    throw new Error(`Unknown or unsafe sign kind for ${sign.file}: ${JSON.stringify(sign.kind)}`);
+  }
+  return `${SIGN_GROUP}-${sign.kind}`;
 }
 
 function referencedFiles(theme) {
@@ -42,7 +62,7 @@ function referencedFiles(theme) {
     for (const file of (reaction && reaction.files) || []) files.add(file);
   }
   for (const entry of theme.idleAnimations || []) {
-    if (entry && entry.activityGroup !== SIGN_GROUP) files.add(entry.file);
+    if (entry && !isSignEntry(entry)) files.add(entry.file);
   }
   return [...files].filter((file) => typeof file === "string" && ASSET_FILE_RE.test(file));
 }
@@ -63,6 +83,7 @@ function syncEggTartTheme({ sourceDir, themeDir }) {
     if (!fs.existsSync(path.join(sourceDir, file))) {
       throw new Error(`signs.json lists ${file}, but it is not in ${sourceDir}`);
     }
+    signGroup(sign, signsDoc.kinds);
   }
 
   const copied = [];
@@ -83,8 +104,8 @@ function syncEggTartTheme({ sourceDir, themeDir }) {
 
   const duration = signDuration(signsDoc);
   theme.idleAnimations = [
-    ...(theme.idleAnimations || []).filter((entry) => entry && entry.activityGroup !== SIGN_GROUP),
-    ...signs.map((sign) => ({ file: sign.file, duration, activityGroup: SIGN_GROUP })),
+    ...(theme.idleAnimations || []).filter((entry) => entry && !isSignEntry(entry)),
+    ...signs.map((sign) => ({ file: sign.file, duration, activityGroup: signGroup(sign, signsDoc.kinds) })),
   ];
   fs.writeFileSync(themePath, JSON.stringify(theme, null, 2) + "\n");
   fs.writeFileSync(path.join(themeDir, "signs.json"), JSON.stringify(signsDoc, null, 2) + "\n");

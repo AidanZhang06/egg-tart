@@ -1,54 +1,155 @@
 {
   "loopMs": 2000,
   "riseMs": 550,
+  "kinds": {
+    "encouragement": {
+      "name": "Encouragement",
+      "filePrefix": "sign-cheer-"
+    },
+    "love": {
+      "name": "Love & sweet",
+      "filePrefix": "sign-love-"
+    },
+    "missing": {
+      "name": "Missing you",
+      "filePrefix": "sign-miss-"
+    }
+  },
   "signs": [
     {
-      "file": "sign-keep-going.svg",
-      "phrase": "Keep going!"
+      "file": "sign-cheer-keep-going.svg",
+      "phrase": "Keep going!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-you-got-this.svg",
-      "phrase": "You got this!"
+      "file": "sign-cheer-you-got-this.svg",
+      "phrase": "You got this!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-youre-amazing.svg",
-      "phrase": "You're amazing!"
+      "file": "sign-cheer-youre-amazing.svg",
+      "phrase": "You're amazing!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-proud-of-you.svg",
-      "phrase": "Proud of you ♥"
+      "file": "sign-cheer-youre-doing-great.svg",
+      "phrase": "You're doing great!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-youre-doing-great.svg",
-      "phrase": "You're doing great!"
+      "file": "sign-cheer-i-believe-in-you.svg",
+      "phrase": "I believe in you!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-i-believe-in-you.svg",
-      "phrase": "I believe in you!"
+      "file": "sign-cheer-proud-of-you.svg",
+      "phrase": "Proud of you ♥",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-one-step-at-a-time.svg",
-      "phrase": "One step at a time"
+      "file": "sign-cheer-one-step-at-a-time.svg",
+      "phrase": "One step at a time",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-almost-there.svg",
-      "phrase": "Almost there!"
+      "file": "sign-cheer-almost-there.svg",
+      "phrase": "Almost there!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-take-a-little-break.svg",
-      "phrase": "Take a little break?"
+      "file": "sign-cheer-take-a-little-break.svg",
+      "phrase": "Take a little break?",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-drink-some-water.svg",
-      "phrase": "Drink some water!"
+      "file": "sign-cheer-drink-some-water.svg",
+      "phrase": "Drink some water!",
+      "kind": "encouragement"
     },
     {
-      "file": "sign-you-make-me-smile.svg",
-      "phrase": "You make me smile ♥"
+      "file": "sign-love-i-love-you.svg",
+      "phrase": "I love you ♥",
+      "kind": "love"
     },
     {
-      "file": "sign-best-girlfriend-ever.svg",
-      "phrase": "Best girlfriend ever ♥"
+      "file": "sign-love-you-make-me-smile.svg",
+      "phrase": "You make me smile ♥",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-best-girlfriend-ever.svg",
+      "phrase": "Best girlfriend ever ♥",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-youre-my-favourite.svg",
+      "phrase": "You're my favourite",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-youre-so-cute.svg",
+      "phrase": "You're so cute!",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-sweeter-than-custard.svg",
+      "phrase": "Sweeter than custard ♥",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-you-me.svg",
+      "phrase": "You + me ♥",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-hugs-kisses.svg",
+      "phrase": "Hugs & kisses",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-my-sunshine.svg",
+      "phrase": "My sunshine ♥",
+      "kind": "love"
+    },
+    {
+      "file": "sign-miss-i-miss-you.svg",
+      "phrase": "I miss you ♥",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-thinking-of-you.svg",
+      "phrase": "Thinking of you",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-wish-you-were-here.svg",
+      "phrase": "Wish you were here",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-cant-wait-to-see-you.svg",
+      "phrase": "Can't wait to see you!",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-sending-hugs.svg",
+      "phrase": "Sending hugs ♥",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-come-back-soon.svg",
+      "phrase": "Come back soon!",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-counting-the-days.svg",
+      "phrase": "Counting the days ♥",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-miss-you-lots.svg",
+      "phrase": "Miss you lots",
+      "kind": "missing"
     }
   ]
 }

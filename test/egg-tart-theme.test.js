@@ -80,14 +80,21 @@ describe("egg tart theme", () => {
     ]);
   });
 
-  it("holds up every encouragement sign from signs.json as one rotation slot", () => {
+  it("holds up each kind of sign from signs.json as its own rotation slot", () => {
     const theme = loadTheme();
-    const listed = JSON.parse(fs.readFileSync(path.join(THEME_DIR, "signs.json"), "utf8")).signs.map((s) => s.file);
-    assert.ok(listed.length > 0);
+    const doc = JSON.parse(fs.readFileSync(path.join(THEME_DIR, "signs.json"), "utf8"));
+    const kinds = Object.keys(doc.kinds);
+    assert.deepEqual(kinds.sort(), ["encouragement", "love", "missing"]);
     const signSlots = listIdleActivityCandidates(theme).filter((candidate) => candidate.files[0].startsWith("sign-"));
-    assert.equal(signSlots.length, 1, "all signs share one slot so they cannot crowd out the hobbies");
-    assert.deepEqual(signSlots[0].files, listed);
-    assert.equal(signSlots[0].duration, 8550);
+    // One slot per kind, each weighted like one hobby, holding exactly that kind's signs.
+    assert.equal(signSlots.length, kinds.length);
+    for (const kind of kinds) {
+      const expected = doc.signs.filter((sign) => sign.kind === kind).map((sign) => sign.file);
+      assert.ok(expected.length > 0, kind);
+      assert.ok(signSlots.some((slot) => JSON.stringify(slot.files) === JSON.stringify(expected)), `slot for ${kind}`);
+    }
+    for (const slot of signSlots) assert.equal(slot.duration, 8550);
+    const listed = doc.signs.map((sign) => sign.file);
     const shipped = fs.readdirSync(ASSETS_DIR).filter((file) => file.startsWith("sign-")).sort();
     assert.deepEqual(shipped, [...listed].sort(), "no stale or missing sign files");
     for (const entry of theme.idleAnimations.filter((e) => e.file.startsWith("sign-"))) {

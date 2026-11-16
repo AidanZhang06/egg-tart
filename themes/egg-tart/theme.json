@@ -138,64 +138,139 @@
       "mirrorOnRightSide": true
     },
     {
-      "file": "sign-keep-going.svg",
+      "file": "sign-cheer-keep-going.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-you-got-this.svg",
+      "file": "sign-cheer-you-got-this.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-youre-amazing.svg",
+      "file": "sign-cheer-youre-amazing.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-proud-of-you.svg",
+      "file": "sign-cheer-youre-doing-great.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-youre-doing-great.svg",
+      "file": "sign-cheer-i-believe-in-you.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-i-believe-in-you.svg",
+      "file": "sign-cheer-proud-of-you.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-one-step-at-a-time.svg",
+      "file": "sign-cheer-one-step-at-a-time.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-almost-there.svg",
+      "file": "sign-cheer-almost-there.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-take-a-little-break.svg",
+      "file": "sign-cheer-take-a-little-break.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-drink-some-water.svg",
+      "file": "sign-cheer-drink-some-water.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-you-make-me-smile.svg",
+      "file": "sign-love-i-love-you.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-love"
     },
     {
-      "file": "sign-best-girlfriend-ever.svg",
+      "file": "sign-love-you-make-me-smile.svg",
       "duration": 8550,
-      "activityGroup": "signs"
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-best-girlfriend-ever.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-youre-my-favourite.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-youre-so-cute.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-sweeter-than-custard.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-you-me.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-hugs-kisses.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-my-sunshine.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-miss-i-miss-you.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-thinking-of-you.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-wish-you-were-here.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-cant-wait-to-see-you.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-sending-hugs.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-come-back-soon.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-counting-the-days.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-miss-you-lots.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
     }
   ],
   "sleepSequence": {

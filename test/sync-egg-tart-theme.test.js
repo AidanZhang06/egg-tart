@@ -78,6 +78,59 @@ describe("syncEggTartTheme", () => {
       ["Keep going!", "You got this!"]);
   });
 
+  it("gives each sign kind its own group and prunes signs from the old naming", () => {
+    const { sourceDir, themeDir } = fixture({
+      signs: {
+        loopMs: 2000,
+        riseMs: 550,
+        kinds: {
+          encouragement: { name: "Encouragement", filePrefix: "sign-cheer-" },
+          love: { name: "Love & sweet", filePrefix: "sign-love-" },
+        },
+        signs: [
+          { file: "sign-cheer-keep-going.svg", phrase: "Keep going!", kind: "encouragement" },
+          { file: "sign-love-i-love-you.svg", phrase: "I love you", kind: "love" },
+          { file: "sign-cheer-almost-there.svg", phrase: "Almost there!", kind: "encouragement" },
+        ],
+      },
+      sourceFiles: {
+        "sign-cheer-keep-going.svg": "<svg/>",
+        "sign-love-i-love-you.svg": "<svg/>",
+        "sign-cheer-almost-there.svg": "<svg/>",
+      },
+      themeFiles: { "sign-old.svg": "<svg>old</svg>", "idle.svg": "<svg/>" },
+      theme: BASE_THEME,
+    });
+
+    const result = syncEggTartTheme({ sourceDir, themeDir });
+
+    assert.deepEqual(result.removed, ["sign-old.svg"]);
+    const theme = JSON.parse(fs.readFileSync(path.join(themeDir, "theme.json"), "utf8"));
+    assert.deepEqual(theme.idleAnimations, [
+      { file: "hobby-read.svg", duration: 9600, mirrorOnRightSide: true },
+      { file: "sign-cheer-keep-going.svg", duration: 8550, activityGroup: "signs-encouragement" },
+      { file: "sign-love-i-love-you.svg", duration: 8550, activityGroup: "signs-love" },
+      { file: "sign-cheer-almost-there.svg", duration: 8550, activityGroup: "signs-encouragement" },
+    ]);
+  });
+
+  it("refuses a sign kind that is unsafe or not declared in kinds", () => {
+    for (const kind of ["../x", "Love", "unknown"]) {
+      const { sourceDir, themeDir } = fixture({
+        signs: {
+          loopMs: 2000, riseMs: 550,
+          kinds: { love: { name: "Love", filePrefix: "sign-love-" } },
+          signs: [{ file: "sign-love-a.svg", phrase: "x", kind }],
+        },
+        sourceFiles: { "sign-love-a.svg": "<svg/>" },
+        themeFiles: { "sign-old.svg": "<svg>old</svg>" },
+        theme: BASE_THEME,
+      });
+      assert.throws(() => syncEggTartTheme({ sourceDir, themeDir }), /sign kind/i, kind);
+      assert.deepEqual(fs.readdirSync(path.join(themeDir, "assets")), ["sign-old.svg"], `${kind}: nothing changed`);
+    }
+  });
+
   it("refuses unsafe or non-sign file names from signs.json", () => {
     for (const file of ["../evil.svg", "sign-a/../../x.svg", "hobby-read.svg", "sign-UPPER.svg", "sign-a.png"]) {
       const { sourceDir, themeDir } = fixture({
