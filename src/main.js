@@ -350,6 +350,8 @@ const SIZES = {
 // a subscriber wired after menu.js loads. The ctx setters route writes through
 // `_settingsController.applyUpdate()`, which auto-persists.
 const prefsModule = require("./prefs");
+// desk-pet: fork switch + first-run defaults (see src/desk-pet-edition.js).
+const { DESK_PET_EDITION, applyDeskPetToLoadResult } = require("./desk-pet-edition");
 const { createSettingsController } = require("./settings-controller");
 const { loadOrCreateInstallationIdentity } = require("./remote-ssh-identity");
 const { createTranslator, i18n, SUPPORTED_LANGS } = require("./i18n");
@@ -363,7 +365,9 @@ const { writeCodexAutoStartGate } = require("../hooks/server-config");
 const { effectiveClaudeConfigDirs, claudeConfigDirKey } = require("../hooks/claude-config-dirs");
 const { createCodexAutoStartGateEvaluator } = require("./agent-gate");
 const PREFS_PATH = path.join(app.getPath("userData"), "clawd-prefs.json");
-const _initialPrefsLoad = prefsModule.load(PREFS_PATH);
+// desk-pet: when prefs fall back to defaults (first run or unusable file), seed
+// the standalone pet settings: walk + activities on, every agent integration off.
+const _initialPrefsLoad = applyDeskPetToLoadResult(prefsModule.load(PREFS_PATH));
 // Recovery from readable invalid contents is writable only after the original
 // bytes are safely kept in .bak. That fallback is not user intent for this
 // process, and a backup failure locks persistence as well. Runtime gates stay
@@ -4835,7 +4839,9 @@ const _menuCtx = {
   getMiniTransitioning: () => _mini.getMiniTransitioning(),
   miniHandleResize: (sizeKey) => _mini.handleResize(sizeKey),
   checkForUpdates: (...args) => checkForUpdates(...args),
-  getUpdateMenuItem: () => getUpdateMenuItem(),
+  // desk-pet: no update entry in menus; menu.js also hides the AI-tool items.
+  getUpdateMenuItem: DESK_PET_EDITION ? undefined : () => getUpdateMenuItem(),
+  deskPetEdition: DESK_PET_EDITION,
   openDashboard: () => showDashboard(),
   launchClaudeSession: (mode, cwd, sessionId) => launchClaudeSession(mode, cwd, sessionId),
   newSessionWithFolder: async (t) => {
@@ -5203,7 +5209,7 @@ const _updaterCtx = {
 const _updater = require("./updater")(_updaterCtx);
 const {
   setupAutoUpdater,
-  checkForUpdates,
+  checkForUpdates: _upstreamCheckForUpdates,
   getUpdateCheckSnapshot,
   clearUpdateError,
   getUpdateMenuItem,
@@ -5213,6 +5219,9 @@ const {
   startUpdateScheduler,
   stopUpdateScheduler,
 } = _updater;
+// desk-pet: this build never checks for or installs updates — an upstream
+// release would replace the fork. Manual checks (About tab) become a no-op.
+const checkForUpdates = DESK_PET_EDITION ? async () => ({ state: "idle" }) : _upstreamCheckForUpdates;
 // Now that updater is constructed, point the forward hook at it.
 notifyUpdaterSilentExit = () => { try { updaterOnSilentModeExit(); } catch {} };
 
@@ -6419,8 +6428,11 @@ if (!gotTheLock) {
     }
 
     // Auto-install VS Code/Cursor terminal-focus extension
-    try { installTerminalFocusExtension(); } catch (err) {
-      console.warn("Clawd: failed to auto-install terminal-focus extension:", err.message);
+    // desk-pet: never write into ~/.vscode or ~/.cursor.
+    if (!DESK_PET_EDITION) {
+      try { installTerminalFocusExtension(); } catch (err) {
+        console.warn("Clawd: failed to auto-install terminal-focus extension:", err.message);
+      }
     }
 
     // Auto-updater: setup event handlers (user triggers check via tray menu)
@@ -6430,7 +6442,10 @@ if (!gotTheLock) {
     // safe in dev mode — reconcile is a no-op when nothing is pending,
     // and startUpdateScheduler() short-circuits on !app.isPackaged.
     try { reconcilePendingOnStartup(); } catch (err) { updateLog(`reconcile failed: ${err && err.message}`); }
-    try { startUpdateScheduler(); } catch (err) { updateLog(`scheduler start failed: ${err && err.message}`); }
+    // desk-pet: no background update checks.
+    if (!DESK_PET_EDITION) {
+      try { startUpdateScheduler(); } catch (err) { updateLog(`scheduler start failed: ${err && err.message}`); }
+    }
 
     // Deferred so any startup Codex hook sync has settled before we read the
     // on-disk hook state; unref'd so it never blocks a fast quit.

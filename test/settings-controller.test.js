@@ -1795,27 +1795,24 @@ describe("idle behavior controller boundary", () => {
   }
 
   for (const [first, second] of [["freeRoam", "idleActivities"], ["idleActivities", "freeRoam"]]) {
-    it(`rejects enabling ${second} while ${first} is enabled without committing`, () => {
+    it(`accepts enabling ${second} while ${first} is enabled`, () => {
       const ctrl = makeController();
       assert.strictEqual(ctrl.applyUpdate(first, true).status, "ok");
-      const before = ctrl.getSnapshot();
       const events = [];
       ctrl.subscribe((event) => events.push(event));
-      assert.strictEqual(ctrl.applyUpdate(second, true).status, "error");
-      assert.deepStrictEqual(ctrl.getSnapshot(), before);
-      assert.strictEqual(events.length, 0);
+      assert.strictEqual(ctrl.applyUpdate(second, true).status, "ok");
+      assert.strictEqual(ctrl.get("freeRoam"), true);
+      assert.strictEqual(ctrl.get("idleActivities"), true);
+      assert.strictEqual(events.length, 1);
     });
   }
 
   for (const method of ["applyBulk", "hydrate"]) {
-    it(`${method} rejects a conflicting pair atomically`, () => {
+    it(`${method} accepts both behaviors together`, () => {
       const ctrl = makeController();
-      const before = ctrl.getSnapshot();
-      const events = [];
-      ctrl.subscribe((event) => events.push(event));
-      assert.strictEqual(ctrl[method]({ soundMuted: true, freeRoam: true, idleActivities: true }).status, "error");
-      assert.deepStrictEqual(ctrl.getSnapshot(), before);
-      assert.strictEqual(events.length, 0);
+      assert.strictEqual(ctrl[method]({ soundMuted: true, freeRoam: true, idleActivities: true }).status, "ok");
+      assert.strictEqual(ctrl.get("freeRoam"), true);
+      assert.strictEqual(ctrl.get("idleActivities"), true);
     });
   }
 
@@ -1826,8 +1823,11 @@ describe("idle behavior controller boundary", () => {
     ctrl.subscribe(({ changes, snapshot }) => events.push({
       changes, freeRoam: snapshot.freeRoam, idleActivities: snapshot.idleActivities,
     }));
-    for (const mode of ["roam", "activities", "none"]) {
-      const target = { freeRoam: mode === "roam", idleActivities: mode === "activities" };
+    for (const mode of ["roam", "activities", "both", "none"]) {
+      const target = {
+        freeRoam: mode === "roam" || mode === "both",
+        idleActivities: mode === "activities" || mode === "both",
+      };
       const count = events.length;
       assert.strictEqual((await ctrl.applyCommand("setIdleBehavior", { mode })).status, "ok");
       assert.strictEqual(events.length, count + 1);
@@ -1841,13 +1841,13 @@ describe("idle behavior controller boundary", () => {
     assert.deepStrictEqual(events[1].changes, { freeRoam: false, idleActivities: true });
   });
 
-  it("rejects another command that attempts a conflicting commit", async () => {
+  it("accepts another command that commits both behaviors", async () => {
     const ctrl = makeController({ commands: {
-      invalidIdleBehavior: () => ({ status: "ok", commit: { freeRoam: true, idleActivities: true } }),
+      bothIdleBehavior: () => ({ status: "ok", commit: { freeRoam: true, idleActivities: true } }),
     } });
-    const before = ctrl.getSnapshot();
-    assert.strictEqual((await ctrl.applyCommand("invalidIdleBehavior")).status, "error");
-    assert.deepStrictEqual(ctrl.getSnapshot(), before);
+    assert.strictEqual((await ctrl.applyCommand("bothIdleBehavior")).status, "ok");
+    assert.strictEqual(ctrl.get("freeRoam"), true);
+    assert.strictEqual(ctrl.get("idleActivities"), true);
   });
 
   it("setIdleBehavior leaves memory and subscribers untouched on save failure", async () => {
