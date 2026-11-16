@@ -5426,7 +5426,10 @@ const settingsIpcRuntime = registerSettingsIpc({
     _tutorial.open();
     return { status: "ok" };
   },
-  aboutHeroSvgPath: path.join(__dirname, "..", "assets", "svg", "clawd-about-hero.svg"),
+  // desk-pet: Settings → About shows the egg tart (written by the theme sync).
+  aboutHeroSvgPath: DESK_PET_EDITION
+    ? path.join(__dirname, "..", "themes", "egg-tart", "about-hero.svg")
+    : path.join(__dirname, "..", "assets", "svg", "clawd-about-hero.svg"),
   getLanWsServer: () => _lanWss,
 });
 

@@ -2725,6 +2725,7 @@ function assertVisibleFeishuLookupPreflight(card, lookupButton, expectedMessage)
 }
 
 function loadAboutTabForTest({
+  deskPet = false,
   snapshot = {},
   update,
   aboutInfo = {},
@@ -2773,6 +2774,8 @@ function loadAboutTabForTest({
   context.window = context;
   context.globalThis = context;
   vm.createContext(context);
+  // desk-pet: settings.html loads desk-pet-name.js before the tabs.
+  if (deskPet) vm.runInContext(fs.readFileSync(path.join(SRC_DIR, "desk-pet-name.js"), "utf8"), context);
   vm.runInContext(fs.readFileSync(path.join(SRC_DIR, "settings-tab-about.js"), "utf8"), context);
   const buttonHelpers = loadSharedButtonHelpersForTest(document, context.settingsAPI, () => core.helpers.t);
 
@@ -22698,5 +22701,26 @@ describe("issue #1323: theme appearance refreshes animation data", () => {
 
     await new Promise((resolve) => setImmediate(resolve));
     assert.ok(fetches >= 1, "animation override data must be refetched");
+  });
+});
+
+
+describe("desk pet About tab", () => {
+  it("shows the Egg Tart name and tagline", () => {
+    const { content } = loadAboutTabForTest({ deskPet: true });
+    assert.equal(content.querySelector(".about-title").textContent, "Egg Tart");
+    assert.equal(content.querySelector(".about-crab-wrap").title, "Egg Tart");
+    assert.equal(content.querySelector(".about-tagline").textContent, "aboutTaglineDeskPet");
+  });
+
+  it("keeps the upstream About header without the renamer", () => {
+    const { content } = loadAboutTabForTest();
+    assert.equal(content.querySelector(".about-title").textContent, "Clawd on Desk");
+    assert.equal(content.querySelector(".about-tagline").textContent, "aboutTagline");
+  });
+
+  it("has an Egg Tart tagline in every Settings locale", () => {
+    const source = fs.readFileSync(path.join(SRC_DIR, "settings-i18n.js"), "utf8");
+    assert.equal((source.match(/^\s+aboutTaglineDeskPet: "/gm) || []).length, 7);
   });
 });

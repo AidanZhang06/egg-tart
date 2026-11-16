@@ -14,6 +14,13 @@
   // rather than renamed. The contribution still ships in hooks/shared-process.js.
   const NO_GITHUB_ACCOUNT = new Set(["tomaioo"]);
 
+  // desk-pet: settings.html loads desk-pet-name.js, so the About header shows
+  // the pet's own name and tagline instead of Clawd on Desk's.
+  const deskPetName = root.ClawdDeskPetName || null;
+  function renameHeader(text) {
+    return deskPetName ? deskPetName.renameForDeskPet(text) : text;
+  }
+
   function t(key) {
     return helpers.t(key);
   }
@@ -301,15 +308,15 @@
 
     const crabWrap = document.createElement("div");
     crabWrap.className = "about-crab-wrap";
-    crabWrap.title = "Clawd";
+    crabWrap.title = renameHeader("Clawd");
 
     const title = document.createElement("h2");
     title.className = "about-title";
-    title.textContent = "Clawd on Desk";
+    title.textContent = renameHeader("Clawd on Desk");
 
     const tagline = document.createElement("p");
     tagline.className = "about-tagline";
-    tagline.textContent = t("aboutTagline");
+    tagline.textContent = t(deskPetName ? "aboutTaglineDeskPet" : "aboutTagline");
 
     hero.appendChild(crabWrap);
     hero.appendChild(title);

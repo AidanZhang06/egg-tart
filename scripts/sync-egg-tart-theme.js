@@ -15,8 +15,9 @@
 //     its own activityGroup "signs-<kind>", so every kind is one rotation slot;
 //     signs without a kind share the group "signs";
 //   • copies signs.json next to theme.json so the phrase list travels along.
-// Hobby entries (durations, mirrorOnRightSide) stay hand-maintained in
-// theme.json. Run `node scripts/validate-theme.js themes/egg-tart` afterwards.
+// It also writes about-hero.svg (the idle animation cropped around the tart)
+// for Settings → About. Hobby entries (durations, mirrorOnRightSide) stay
+// hand-maintained in theme.json. Run `node scripts/validate-theme.js themes/egg-tart` afterwards.
 
 const fs = require("fs");
 const path = require("path");
@@ -67,6 +68,22 @@ function referencedFiles(theme) {
   return [...files].filter((file) => typeof file === "string" && ASSET_FILE_RE.test(file));
 }
 
+// Settings → About shows a 140×112 picture; crop the idle canvas to a 5:4 box
+// around the tart (x 0.5–19.5, y 4.4–20 plus its shadow).
+const ABOUT_HERO_VIEWBOX = "-2.5 2 25 20";
+
+function writeAboutHero(theme, themeDir) {
+  const idle = theme.states && Array.isArray(theme.states.idle) ? theme.states.idle[0] : null;
+  const idlePath = idle && ASSET_FILE_RE.test(idle) ? path.join(themeDir, "assets", idle) : null;
+  if (!idlePath || !fs.existsSync(idlePath)) return false;
+  const svg = fs.readFileSync(idlePath, "utf8").replace(/<svg\b[^>]*>/, (tag) => tag
+    .replace(/\sviewBox="[^"]*"/, ` viewBox="${ABOUT_HERO_VIEWBOX}"`)
+    .replace(/\swidth="[^"]*"/, ' width="500"')
+    .replace(/\sheight="[^"]*"/, ' height="400"'));
+  fs.writeFileSync(path.join(themeDir, "about-hero.svg"), svg);
+  return true;
+}
+
 function syncEggTartTheme({ sourceDir, themeDir }) {
   const assetsDir = path.join(themeDir, "assets");
   const themePath = path.join(themeDir, "theme.json");
@@ -109,6 +126,7 @@ function syncEggTartTheme({ sourceDir, themeDir }) {
   ];
   fs.writeFileSync(themePath, JSON.stringify(theme, null, 2) + "\n");
   fs.writeFileSync(path.join(themeDir, "signs.json"), JSON.stringify(signsDoc, null, 2) + "\n");
+  writeAboutHero(theme, themeDir);
   return { copied, removed, signs: signs.length, signDuration: duration };
 }
 

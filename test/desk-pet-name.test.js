@@ -42,6 +42,12 @@ describe("Egg Tart naming is wired in", () => {
     assert.match(core, /function t\(key\) \{[\s\S]{0,200}renameText\(/);
   });
 
+  it("shows the egg tart in Settings → About", () => {
+    const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8");
+    assert.ok(main.includes('aboutHeroSvgPath: DESK_PET_EDITION\n    ? path.join(__dirname, "..", "themes", "egg-tart", "about-hero.svg")'));
+    assert.ok(fs.existsSync(path.join(SRC, "..", "themes", "egg-tart", "about-hero.svg")));
+  });
+
   it("titles the Settings window with the pet's name", () => {
     const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8");
     assert.ok(main.includes('getTitle: () => (DESK_PET_EDITION ? renameForDeskPet(translate("settingsWindowTitle")) : translate("settingsWindowTitle")),'));

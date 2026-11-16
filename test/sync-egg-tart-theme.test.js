@@ -131,6 +131,21 @@ describe("syncEggTartTheme", () => {
     }
   });
 
+  it("derives the About picture from the idle animation, cropped around the tart", () => {
+    const idle = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -34 60 60" width="500" height="500" shape-rendering="crispEdges"><g id="eyes-js"/></svg>';
+    const { sourceDir, themeDir } = fixture({
+      signs: { loopMs: 2000, riseMs: 550, signs: [] },
+      sourceFiles: { "idle.svg": idle },
+      themeFiles: {},
+      theme: BASE_THEME,
+    });
+    syncEggTartTheme({ sourceDir, themeDir });
+    assert.equal(
+      fs.readFileSync(path.join(themeDir, "about-hero.svg"), "utf8"),
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2.5 2 25 20" width="500" height="400" shape-rendering="crispEdges"><g id="eyes-js"/></svg>',
+    );
+  });
+
   it("refuses unsafe or non-sign file names from signs.json", () => {
     for (const file of ["../evil.svg", "sign-a/../../x.svg", "hobby-read.svg", "sign-UPPER.svg", "sign-a.png"]) {
       const { sourceDir, themeDir } = fixture({
