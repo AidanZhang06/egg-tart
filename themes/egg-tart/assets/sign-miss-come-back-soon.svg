@@ -20,6 +20,8 @@
       }
       @keyframes sign-bounce { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.025, 0.975); } }
       @keyframes sign-shadow { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(1.04); } }
+      .pulse { transform-box: fill-box; transform-origin: 50% 60%; animation: sign-pulse 1s 0.55s infinite ease-out; }
+      @keyframes sign-pulse { 0%, 45%, 100% { transform: scale(1); } 12% { transform: scale(1.07); } 24% { transform: scale(1.01); } 34% { transform: scale(1.05); } }
       .beat { transform-box: fill-box; transform-origin: center; animation: sign-beat 1s infinite ease-out; }
       @keyframes sign-beat {
       0%, 40%, 100% { transform: scale(1); }
@@ -34,10 +36,10 @@
   <g class="shadow"><rect x="3" y="20" width="14" height="1" fill="#000" opacity="0.5"/></g>
   <g class="body">
   <g class="rise"><g class="hold">
-  <rect class="free" x="0" y="3.6" width="0.6" height="4.6" fill="#8E5424"/>
-  <rect class="free" x="0" y="3.6" width="0.2" height="4.6" fill="#B87A42"/>
-  <rect class="free" x="19.4" y="3.6" width="0.6" height="4.6" fill="#8E5424"/>
-  <rect class="free" x="19.4" y="3.6" width="0.2" height="4.6" fill="#B87A42"/>
+  <rect class="free" x="0" y="3.4" width="0.6" height="4.8" fill="#8E5424"/>
+  <rect class="free" x="0" y="3.4" width="0.2" height="4.8" fill="#B87A42"/>
+  <rect class="free" x="19.4" y="3.4" width="0.6" height="4.8" fill="#8E5424"/>
+  <rect class="free" x="19.4" y="3.4" width="0.2" height="4.8" fill="#B87A42"/>
   <g transform="translate(-3.5 -7.8) scale(0.6)">
   <rect x="1" y="0" width="43" height="1" fill="#4F6396"/>
   <rect x="0" y="1" width="1" height="1" fill="#4F6396"/>

@@ -183,7 +183,7 @@
       "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-cheer-take-it-easy.svg",
+      "file": "sign-cheer-take-it-easy-my-warrior.svg",
       "duration": 8550,
       "activityGroup": "signs-encouragement"
     },
@@ -193,47 +193,62 @@
       "activityGroup": "signs-encouragement"
     },
     {
-      "file": "sign-love-i-love-you.svg",
+      "file": "sign-cheer-hang-in-there-baby.svg",
+      "duration": 8550,
+      "activityGroup": "signs-encouragement"
+    },
+    {
+      "file": "sign-love-we-got-this.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-you-make-me-smile.svg",
+      "file": "sign-love-were-going-to-make-it.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-best-girlfriend-ever.svg",
+      "file": "sign-love-were-locked-in.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-youre-my-favourite.svg",
+      "file": "sign-love-i-love-you-so-much.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-youre-so-cute.svg",
+      "file": "sign-love-i-love-you-always.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-sweeter-than-custard.svg",
+      "file": "sign-love-eggtart-and-cocobun-forever.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-you-me.svg",
+      "file": "sign-love-chocolate-and-strawberry-forever.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-hugs-kisses.svg",
+      "file": "sign-love-youre-looking-beautiful-rn.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
     {
-      "file": "sign-love-my-sunshine.svg",
+      "file": "sign-love-youre-the-sweetest-ever.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-hi-code-monkie.svg",
+      "duration": 8550,
+      "activityGroup": "signs-love"
+    },
+    {
+      "file": "sign-love-heart.svg",
       "duration": 8550,
       "activityGroup": "signs-love"
     },
@@ -244,6 +259,16 @@
     },
     {
       "file": "sign-miss-come-back-soon.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-eggtart-misses-cocobun.svg",
+      "duration": 8550,
+      "activityGroup": "signs-missing"
+    },
+    {
+      "file": "sign-miss-where-is-my-cocobun.svg",
       "duration": 8550,
       "activityGroup": "signs-missing"
     }

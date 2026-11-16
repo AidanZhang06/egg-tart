@@ -62,8 +62,8 @@
       "kind": "encouragement"
     },
     {
-      "file": "sign-cheer-take-it-easy.svg",
-      "phrase": "Take it easy",
+      "file": "sign-cheer-take-it-easy-my-warrior.svg",
+      "phrase": "Take it easy my warrior",
       "kind": "encouragement"
     },
     {
@@ -72,48 +72,63 @@
       "kind": "encouragement"
     },
     {
-      "file": "sign-love-i-love-you.svg",
-      "phrase": "I love you ♥",
+      "file": "sign-cheer-hang-in-there-baby.svg",
+      "phrase": "Hang in there baby",
+      "kind": "encouragement"
+    },
+    {
+      "file": "sign-love-we-got-this.svg",
+      "phrase": "We got this",
       "kind": "love"
     },
     {
-      "file": "sign-love-you-make-me-smile.svg",
-      "phrase": "You make me smile ♥",
+      "file": "sign-love-were-going-to-make-it.svg",
+      "phrase": "We're going to make it",
       "kind": "love"
     },
     {
-      "file": "sign-love-best-girlfriend-ever.svg",
-      "phrase": "Best girlfriend ever ♥",
+      "file": "sign-love-were-locked-in.svg",
+      "phrase": "We're locked in",
       "kind": "love"
     },
     {
-      "file": "sign-love-youre-my-favourite.svg",
-      "phrase": "You're my favourite",
+      "file": "sign-love-i-love-you-so-much.svg",
+      "phrase": "I love you so much",
       "kind": "love"
     },
     {
-      "file": "sign-love-youre-so-cute.svg",
-      "phrase": "You're so cute!",
+      "file": "sign-love-i-love-you-always.svg",
+      "phrase": "I love you always",
       "kind": "love"
     },
     {
-      "file": "sign-love-sweeter-than-custard.svg",
-      "phrase": "Sweeter than custard ♥",
+      "file": "sign-love-eggtart-and-cocobun-forever.svg",
+      "phrase": "Eggtart and cocobun forever",
       "kind": "love"
     },
     {
-      "file": "sign-love-you-me.svg",
-      "phrase": "You + me ♥",
+      "file": "sign-love-chocolate-and-strawberry-forever.svg",
+      "phrase": "Chocolate and strawberry forever",
       "kind": "love"
     },
     {
-      "file": "sign-love-hugs-kisses.svg",
-      "phrase": "Hugs & kisses",
+      "file": "sign-love-youre-looking-beautiful-rn.svg",
+      "phrase": "You're looking beautiful rn",
       "kind": "love"
     },
     {
-      "file": "sign-love-my-sunshine.svg",
-      "phrase": "My sunshine ♥",
+      "file": "sign-love-youre-the-sweetest-ever.svg",
+      "phrase": "You're the sweetest ever",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-hi-code-monkie.svg",
+      "phrase": "Hi code monkie",
+      "kind": "love"
+    },
+    {
+      "file": "sign-love-heart.svg",
+      "phrase": "♥",
       "kind": "love"
     },
     {
@@ -124,6 +139,16 @@
     {
       "file": "sign-miss-come-back-soon.svg",
       "phrase": "Come back soon",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-eggtart-misses-cocobun.svg",
+      "phrase": "Eggtart misses cocobun",
+      "kind": "missing"
+    },
+    {
+      "file": "sign-miss-where-is-my-cocobun.svg",
+      "phrase": "Where is my cocobun :(",
       "kind": "missing"
     }
   ]
