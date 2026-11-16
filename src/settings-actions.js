@@ -604,23 +604,11 @@ const updateRegistry = {
   allowEdgePinning: requireBoolean("allowEdgePinning"),
   disableMiniMode: requireBoolean("disableMiniMode"),
   eyeTrackingEnabled: requireBoolean("eyeTrackingEnabled"),
-  freeRoam(value, deps = {}) {
-    const base = requireBoolean("freeRoam")(value);
-    if (base.status !== "ok") return base;
-    if (value && deps.snapshot && deps.snapshot.idleActivities === true) {
-      return { status: "error", message: "freeRoam and idleActivities are mutually exclusive; use setIdleBehavior to switch." };
-    }
-    return { status: "ok" };
-  },
+  // desk-pet: free roam and idle activities may both be on; setIdleBehavior
+  // "both" commits them together.
+  freeRoam: requireBoolean("freeRoam"),
   roamConstrainAxis: requireBoolean("roamConstrainAxis"),
-  idleActivities(value, deps = {}) {
-    const base = requireBoolean("idleActivities")(value);
-    if (base.status !== "ok") return base;
-    if (value && deps.snapshot && deps.snapshot.freeRoam === true) {
-      return { status: "error", message: "freeRoam and idleActivities are mutually exclusive; use setIdleBehavior to switch." };
-    }
-    return { status: "ok" };
-  },
+  idleActivities: requireBoolean("idleActivities"),
   idleActivityFrequency: requireEnum("idleActivityFrequency", ["low", "medium", "high"]),
   keepSizeAcrossDisplays: {
     validate: requireBoolean("keepSizeAcrossDisplays"),
@@ -1465,10 +1453,13 @@ function setThemeSelection(payload, deps) {
 
 function setIdleBehavior(payload, deps = {}) {
   const mode = typeof payload === "string" ? payload : payload && payload.mode;
-  if (!["none", "roam", "activities"].includes(mode)) {
-    return { status: "error", message: "setIdleBehavior.mode must be none, roam, or activities" };
+  if (!["none", "roam", "activities", "both"].includes(mode)) {
+    return { status: "error", message: "setIdleBehavior.mode must be none, roam, activities, or both" };
   }
-  const commit = { freeRoam: mode === "roam", idleActivities: mode === "activities" };
+  const commit = {
+    freeRoam: mode === "roam" || mode === "both",
+    idleActivities: mode === "activities" || mode === "both",
+  };
   const snapshot = deps.snapshot || {};
   if (snapshot.freeRoam === commit.freeRoam && snapshot.idleActivities === commit.idleActivities) {
     return { status: "ok", noop: true };

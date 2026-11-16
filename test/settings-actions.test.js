@@ -3668,14 +3668,12 @@ describe("version validator", () => {
 
 describe("idle behavior validation and command", () => {
   for (const [key, other] of [["freeRoam", "idleActivities"], ["idleActivities", "freeRoam"]]) {
-    it(`${key} validates booleans and rejects the conflicting enabled mode`, () => {
+    it(`${key} validates booleans and may be on together with ${other}`, () => {
       const validate = updateRegistry[key];
       assert.strictEqual(typeof validate, "function");
       assert.strictEqual(validate(true).status, "ok");
       assert.strictEqual(validate(true, { snapshot: { [other]: false } }).status, "ok");
-      const conflict = validate(true, { snapshot: { [other]: true } });
-      assert.strictEqual(conflict.status, "error");
-      assert.match(conflict.message, /mutually exclusive.*setIdleBehavior/);
+      assert.strictEqual(validate(true, { snapshot: { [other]: true } }).status, "ok");
       for (const otherValue of [false, true]) {
         assert.strictEqual(validate(false, { snapshot: { [other]: otherValue } }).status, "ok");
         for (const value of [null, undefined, "true", 1, {}, []]) {
@@ -3689,6 +3687,7 @@ describe("idle behavior validation and command", () => {
     none: { freeRoam: false, idleActivities: false },
     roam: { freeRoam: true, idleActivities: false },
     activities: { freeRoam: false, idleActivities: true },
+    both: { freeRoam: true, idleActivities: true },
   };
   for (const [mode, target] of Object.entries(targets)) {
     it(`setIdleBehavior commits the ${mode} pair for string and object payloads`, () => {

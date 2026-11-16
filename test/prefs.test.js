@@ -2670,14 +2670,14 @@ describe("prefs.disableHardwareAcceleration (#1183)", () => {
 });
 
 describe("idle behavior file normalization", () => {
-  it("preserves roam when both behaviors are enabled", () => {
+  it("preserves both behaviors when both are enabled", () => {
     const snapshot = prefs.validate({ freeRoam: true, idleActivities: true });
     assert.strictEqual(snapshot.freeRoam, true);
-    assert.strictEqual(snapshot.idleActivities, false);
+    assert.strictEqual(snapshot.idleActivities, true);
   });
 
-  it("preserves all three valid behavior pairs", () => {
-    for (const [freeRoam, idleActivities] of [[false, false], [true, false], [false, true]]) {
+  it("preserves all four valid behavior pairs", () => {
+    for (const [freeRoam, idleActivities] of [[false, false], [true, false], [false, true], [true, true]]) {
       const snapshot = prefs.validate({ freeRoam, idleActivities });
       assert.strictEqual(snapshot.freeRoam, freeRoam);
       assert.strictEqual(snapshot.idleActivities, idleActivities);
