@@ -81,6 +81,13 @@ const ARM64_ASSET = {
   size: 129682958,
 };
 
+// desk-pet: the standalone fork has no build.publish feed (it never ships
+// Windows/winget releases or self-updates), so contract checks that read the
+// real package.json publish target are skipped there.
+const NO_PUBLISH_FEED = require("../package.json").build.publish
+  ? false
+  : "no build.publish feed (desk-pet fork does not publish releases)";
+
 describe("winget architecture resolver (ported from winget-types from_url)", () => {
   it("resolves our shipped installer names to distinct architectures", () => {
     assert.equal(
@@ -134,7 +141,7 @@ describe("winget architecture resolver (ported from winget-types from_url)", () 
   });
 });
 
-describe("winget architecture contract", () => {
+describe("winget architecture contract", { skip: NO_PUBLISH_FEED }, () => {
   it("passes for the current package.json", () => {
     const report = verifyWingetArchContract();
     assert.deepEqual(report.errors, [], report.errors.join("\n"));
@@ -463,7 +470,7 @@ describe("winget contract release-asset cross-check", () => {
   });
 });
 
-describe("winget contract installers-regex cross-check", () => {
+describe("winget contract installers-regex cross-check", { skip: NO_PUBLISH_FEED }, () => {
   const workflowRegex = (() => {
     const match = WORKFLOW.match(/^\s*INSTALLERS_REGEX:\s*'(.+)'\s*$/m);
     assert.ok(match, "workflow must define INSTALLERS_REGEX");
@@ -528,7 +535,7 @@ describe("winget contract installers-regex cross-check", () => {
   });
 });
 
-describe("winget contract helpers", () => {
+describe("winget contract helpers", { skip: NO_PUBLISH_FEED }, () => {
   it("reads the Windows build config from package.json", () => {
     const build = readWindowsBuildConfig(pkg);
     assert.equal(build.owner, "rullerzhou-afk");
@@ -629,7 +636,7 @@ describe("winget contract tagged build configuration", () => {
   });
 });
 
-describe("winget contract CLI", () => {
+describe("winget contract CLI", { skip: NO_PUBLISH_FEED }, () => {
   function scratch() {
     return fs.mkdtempSync(path.join(os.tmpdir(), "winget-arch-"));
   }

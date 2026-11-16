@@ -1,3 +1,15 @@
+> **About this fork: Clawd Desk Pet.** This is a standalone build of Clawd on Desk for people who don't use an AI coding tool. It never connects to Claude Code, Codex or any other agent.
+>
+> - **Out of the box:** the pet wanders around your desktop when you leave the mouse alone. Every minute or so it plays a little activity, like typing, building, juggling, sweeping or celebrating. It falls asleep after a minute of no mouse movement, and moving the mouse wakes it. You can change this in **Settings → Pet → When idle**.
+> - **Nothing written to AI-tool config:** no hooks, plugins or editor extensions, and no first-run tutorial.
+> - **No update checks:** the app never checks for or installs updates, so an upstream release can't replace this build.
+> - **Simpler menus:** the dashboard, recap, new session, permission and bubble items are hidden.
+> - **Separate app:** it's called "Clawd Desk Pet" (`com.clawd.desk-pet`), so it can sit next to an original Clawd on Desk install without sharing settings.
+>
+> **Build:** run `npm install && npm run build:mac`. You get `dist/Clawd-Desk-Pet-<version>-arm64.dmg` for Apple Silicon and `-x64.dmg` for Intel. The app isn't signed by Apple, so the first time you open it, right-click the app in Applications and choose **Open**. Then turn on **Start on Login** from the menu-bar icon if you want it there every day.
+>
+> Everything below is the original project's README.
+
 <p align="center">
   <img src="assets/icon.png" width="128" alt="Clawd">
 </p>
