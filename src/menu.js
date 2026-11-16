@@ -258,9 +258,13 @@ module.exports = function initMenu(ctx) {
       buildMiniModeMenuItem(),
     ];
 
+    // desk-pet: the standalone pet build has no agents, so it drops the
+    // bubble/dashboard/permission/update items (see src/desk-pet-edition.js).
+    const deskPet = ctx.deskPetEdition === true;
+
     // Quick noise toggles (bubbles + sound) kept together.
     const noiseGroup = [
-      {
+      deskPet ? null : {
         label: t("hideBubbles"),
         type: "checkbox",
         checked: ctx.hideBubbles,
@@ -272,11 +276,11 @@ module.exports = function initMenu(ctx) {
         checked: !ctx.soundMuted,
         click: (menuItem) => { ctx.soundMuted = !menuItem.checked; },
       },
-    ];
+    ].filter(Boolean);
 
     // Dashboard + the danger auto-approve toggle (danger last, as in the
     // context menu).
-    const workGroup = [
+    const workGroup = deskPet ? [] : [
       {
         label: t("openDashboard"),
         click: () => {
@@ -328,7 +332,7 @@ module.exports = function initMenu(ctx) {
     ];
     // #329: surface the update item alongside the app actions. The label
     // switches to "Update available · vX" / "Update Ready" when applicable.
-    if (typeof ctx.getUpdateMenuItem === "function") {
+    if (!deskPet && typeof ctx.getUpdateMenuItem === "function") {
       const updateItem = ctx.getUpdateMenuItem();
       if (updateItem) appGroup.push(updateItem);
     }
@@ -557,6 +561,8 @@ module.exports = function initMenu(ctx) {
     // list that wrapped almost every item in its own separator, and it moves the
     // danger auto-approve toggle into the work group instead of leaving it as a
     // prominent top-level entry.
+    // desk-pet: see buildTrayMenu.
+    const deskPet = ctx.deskPetEdition === true;
     const stateGroup = [
       { ...buildMiniModeMenuItem() },
       {
@@ -565,7 +571,7 @@ module.exports = function initMenu(ctx) {
       },
     ];
 
-    const workGroup = [
+    const workGroup = deskPet ? [] : [
       {
         label: t("openDashboard"),
         click: () => {
@@ -620,7 +626,7 @@ module.exports = function initMenu(ctx) {
     ];
     // #329: surface the update item alongside the other app actions when one is
     // available.
-    if (typeof ctx.getUpdateMenuItem === "function") {
+    if (!deskPet && typeof ctx.getUpdateMenuItem === "function") {
       const updateItem = ctx.getUpdateMenuItem();
       if (updateItem) appGroup.push(updateItem);
     }
