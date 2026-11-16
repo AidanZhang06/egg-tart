@@ -113,6 +113,13 @@ function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 }
 
+// desk-pet: the standalone build ships the egg tart menu-bar icon, so checks
+// of Clawd's own mark geometry (center gap, edge-to-edge canvas, completion
+// flash = mark + cue) do not apply; the size/format checks still run.
+const CLAWD_MARK_REPLACED = require("../src/desk-pet-edition").DESK_PET_EDITION
+  ? "desk-pet build ships the egg tart menu-bar icon instead of the Clawd mark"
+  : false;
+
 describe("macOS tray Template assets", () => {
   it("keeps reproducible project-mark sources and the legacy runtime evidence", () => {
     for (const file of Object.values(SOURCE)) assert.ok(fs.existsSync(file), `${file} should exist`);
@@ -131,7 +138,7 @@ describe("macOS tray Template assets", () => {
     assert.ok(!pkg.build.files.some((entry) => entry.startsWith("assets/source")));
   });
 
-  it("preserves the original logo proportions and a visible center gap", () => {
+  it("preserves the original logo proportions and a visible center gap", { skip: CLAWD_MARK_REPLACED }, () => {
     const source = fs.readFileSync(SOURCE.normal, "utf8");
     assert.match(source, /510x222 union with a 136px \(26\.7%\) center gap/);
     assert.match(source, /scaled to a near-full 18pt menu-bar canvas/);
@@ -157,7 +164,7 @@ describe("macOS tray Template assets", () => {
     assert.notDeepStrictEqual(renderAlpha(18, original), renderAlpha(18, widened));
   });
 
-  it("uses the near-full canvas without changing the 18pt logical slot", () => {
+  it("uses the near-full canvas without changing the 18pt logical slot", { skip: CLAWD_MARK_REPLACED }, () => {
     for (const [key, file] of Object.entries(RUNTIME)) {
       const image = decodeRgbaPng(file);
       const bounds = alphaBounds(image);
@@ -170,7 +177,7 @@ describe("macOS tray Template assets", () => {
     }
   });
 
-  it("keeps the complete mark geometry and only adds a bounded completion cue", () => {
+  it("keeps the complete mark geometry and only adds a bounded completion cue", { skip: CLAWD_MARK_REPLACED }, () => {
     for (const [normalKey, flashKey] of [["normal1x", "flash1x"], ["normal2x", "flash2x"]]) {
       const normal = decodeRgbaPng(RUNTIME[normalKey]);
       const flash = decodeRgbaPng(RUNTIME[flashKey]);
