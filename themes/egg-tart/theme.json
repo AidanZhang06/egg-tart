@@ -34,7 +34,8 @@
   "eyeTracking": {
     "enabled": true,
     "states": [
-      "idle"
+      "idle",
+      "dozing"
     ],
     "eyeRatioX": 0.5,
     "eyeRatioY": 0.756,
@@ -45,7 +46,8 @@
     "ids": {
       "eyes": "eyes-js",
       "body": "body-js",
-      "shadow": "shadow-js"
+      "shadow": "shadow-js",
+      "dozeEyes": "eyes-doze"
     },
     "shadowOrigin": "10px 20px"
   },
@@ -55,6 +57,15 @@
     ],
     "roam": [
       "roam.svg"
+    ],
+    "yawning": [
+      "yawning.svg"
+    ],
+    "dozing": [
+      "dozing.svg"
+    ],
+    "collapsing": [
+      "collapsing.svg"
     ],
     "thinking": [
       "thinking.svg"
@@ -80,6 +91,9 @@
     "waking": [
       "waking.svg"
     ],
+    "dizzy": [
+      "dizzy.svg"
+    ],
     "error": {
       "fallbackTo": "attention"
     },
@@ -87,8 +101,25 @@
       "fallbackTo": "attention"
     }
   },
+  "idleAnimations": [
+    {
+      "file": "hobby-crochet.svg",
+      "duration": 9600,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-reading.svg",
+      "duration": 9600,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-music.svg",
+      "duration": 8000,
+      "mirrorOnRightSide": true
+    }
+  ],
   "sleepSequence": {
-    "mode": "direct"
+    "mode": "full"
   },
   "timings": {
     "minDisplay": {
@@ -105,12 +136,15 @@
       "error": 5000,
       "sweeping": 300000,
       "notification": 5000,
-      "carrying": 3000
+      "carrying": 3000,
+      "dizzy": 6000
     },
     "wakeDuration": 1500,
     "deepSleepTimeout": 600000,
     "mouseIdleTimeout": 20000,
-    "mouseSleepTimeout": 60000
+    "mouseSleepTimeout": 60000,
+    "yawnDuration": 3000,
+    "collapseDuration": 2400
   },
   "hitBoxes": {
     "default": {
@@ -133,7 +167,8 @@
     }
   },
   "sleepingHitboxFiles": [
-    "sleeping.svg"
+    "sleeping.svg",
+    "collapsing.svg"
   ],
   "reactions": {
     "drag": {
@@ -146,6 +181,12 @@
     "clickRight": {
       "file": "react-right.svg",
       "duration": 2500
+    },
+    "double": {
+      "files": [
+        "react-double.svg"
+      ],
+      "duration": 3500
     }
   }
 }

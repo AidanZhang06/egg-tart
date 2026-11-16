@@ -54,6 +54,45 @@ describe("egg tart theme", () => {
     assert.equal(new Set(files).size, files.length, "activity states must not share a file");
   });
 
+  it("plays its hobby scenes in the activity rotation for whole loops, mirrored near the right edge", () => {
+    const theme = loadTheme();
+    const hobbies = listIdleActivityCandidates(theme)
+      .filter((candidate) => candidate.files[0].startsWith("hobby-"))
+      .map((candidate) => [candidate.files[0], candidate.duration]);
+    // 4.8 s loops play twice (9.6 s); the 4 s music loop plays twice (8 s).
+    assert.deepEqual(hobbies, [
+      ["hobby-crochet.svg", 9600],
+      ["hobby-reading.svg", 9600],
+      ["hobby-music.svg", 8000],
+    ]);
+    for (const entry of theme.idleAnimations) {
+      assert.equal(entry.mirrorOnRightSide, true, `${entry.file} reaches right, so it must mirror on the right side`);
+    }
+  });
+
+  it("falls asleep through the full yawn, doze and collapse sequence", () => {
+    const theme = loadTheme();
+    assert.equal(theme.sleepSequence.mode, "full");
+    for (const state of ["yawning", "dozing", "collapsing"]) {
+      assert.deepEqual(theme.states[state], [`${state}.svg`], state);
+    }
+    // yawning.svg plays for 3 s; collapsing.svg hands off to sleeping at 2.4 s.
+    assert.ok(theme.timings.yawnDuration >= 3000);
+    assert.equal(theme.timings.collapseDuration, 2400);
+    // Dozing keeps cursor eye tracking and opens its eyes smoothly on wake.
+    assert.ok(theme.eyeTracking.states.includes("dozing"));
+    const dozing = fs.readFileSync(path.join(ASSETS_DIR, "dozing.svg"), "utf8");
+    assert.match(dozing, /id="eyes-js"/);
+    assert.match(dozing, /id="eyes-doze"/);
+  });
+
+  it("reacts to double-clicks and to being spun dizzy", () => {
+    const theme = loadTheme();
+    assert.deepEqual(theme.reactions.double, { files: ["react-double.svg"], duration: 3500 });
+    assert.deepEqual(theme.states.dizzy, ["dizzy.svg"]);
+    assert.equal(theme.timings.autoReturn.dizzy, 6000);
+  });
+
   it("walks, sleeps, wakes and tracks the cursor with its own art", () => {
     const theme = loadTheme();
     for (const state of ["idle", "roam", "sleeping", "waking"]) {
