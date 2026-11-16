@@ -357,6 +357,7 @@ const {
   applyDeskPetToLoadResult,
   gateUpdaterForDeskPet,
 } = require("./desk-pet-edition");
+const { renameForDeskPet } = require("./desk-pet-name");
 const { createSettingsController } = require("./settings-controller");
 const { loadOrCreateInstallationIdentity } = require("./remote-ssh-identity");
 const { createTranslator, i18n, SUPPORTED_LANGS } = require("./i18n");
@@ -972,7 +973,7 @@ const settingsWindowRuntime = createSettingsWindowRuntime({
   ),
   getSavedBounds: () => _settingsController.get("settingsWindowBounds"),
   onSaveBounds: (bounds) => _settingsController.applyUpdate("settingsWindowBounds", bounds),
-  getTitle: () => translate("settingsWindowTitle"),
+  getTitle: () => (DESK_PET_EDITION ? renameForDeskPet(translate("settingsWindowTitle")) : translate("settingsWindowTitle")),
   onBeforeCreate: () => bumpAnimationOverridePreviewPosterGeneration(),
   // A replaced or crashed Settings page cannot send its preview-ending IPC.
   onRendererReset: () => { void settingsSizePreviewSession.cleanup(); },

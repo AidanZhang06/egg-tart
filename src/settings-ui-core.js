@@ -18,6 +18,13 @@
   }
 
   const i18nApi = root.ClawdSettingsI18n || {};
+  // desk-pet: show the pet's own name ("Egg Tart") instead of "Clawd".
+  const deskPetNameApi = root.ClawdDeskPetName || null;
+  function renameText(text) {
+    return deskPetNameApi && typeof deskPetNameApi.renameForDeskPet === "function"
+      ? deskPetNameApi.renameForDeskPet(text)
+      : text;
+  }
   const STRINGS = i18nApi.STRINGS;
   const CONTRIBUTORS = i18nApi.CONTRIBUTORS;
   const MAINTAINERS = i18nApi.MAINTAINERS;
@@ -313,7 +320,7 @@
 
   function t(key) {
     const dict = STRINGS[getLang()] || STRINGS.en || {};
-    return dict[key] || (STRINGS.en && STRINGS.en[key]) || key;
+    return renameText(dict[key] || (STRINGS.en && STRINGS.en[key]) || key);
   }
 
   function escapeHtml(s) {

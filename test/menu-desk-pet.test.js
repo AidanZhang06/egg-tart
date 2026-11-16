@@ -15,7 +15,7 @@ function loadMenu(platform = "darwin") {
     BrowserWindow: function BrowserWindow() {},
     Menu: { buildFromTemplate: (template) => ({ template }) },
     Tray: function Tray() {
-      this.setToolTip = () => {};
+      this.setToolTip = (text) => { this.tooltip = text; };
       this.setContextMenu = (menu) => { this.contextMenu = menu; };
       this.destroy = () => {};
     },
@@ -222,5 +222,33 @@ describe("desk pet size menu", () => {
     const { tray, context } = buildBoth({});
     assert.ok(!tray.includes(t("size")));
     assert.ok(!context.includes(t("size")));
+  });
+});
+
+describe("desk pet menu naming", () => {
+  it("uses the Egg Tart name in the menus and the menu-bar tooltip", () => {
+    const initMenu = loadMenu();
+    let tooltip = null;
+    const ctx = buildCtx({ deskPetEdition: true, doNotDisturb: true });
+    const menu = initMenu(ctx);
+    menu.createTray();
+    tooltip = ctx.tray.tooltip;
+    menu.buildContextMenu();
+    assert.equal(tooltip, "Egg Tart");
+    for (const template of [ctx.tray.contextMenu.template, ctx.contextMenu.template]) {
+      const labels = labelsOf(template);
+      assert.ok(labels.includes("Wake Egg Tart"), labels.join(" | "));
+      assert.ok(!labels.some((label) => /Clawd/.test(label)), "no Clawd in desk pet menus");
+    }
+  });
+
+  it("keeps the upstream name without the edition flag", () => {
+    const initMenu = loadMenu();
+    const ctx = buildCtx({ doNotDisturb: true });
+    const menu = initMenu(ctx);
+    menu.createTray();
+    menu.buildContextMenu();
+    assert.equal(ctx.tray.tooltip, "Clawd Desktop Pet");
+    assert.ok(labelsOf(ctx.contextMenu.template).includes("Wake Clawd"));
   });
 });

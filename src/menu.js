@@ -30,6 +30,7 @@ const SIZES = {
 // i18n string pool + translator factory live in src/i18n.js so the future
 // settings panel can share them. menu.js binds the translator to ctx.lang.
 const { createTranslator } = require("./i18n");
+const { DESK_PET_APP_NAME, renameForDeskPet } = require("./desk-pet-name");
 
 // Concatenate menu groups into one Electron template, inserting exactly one
 // separator between non-empty groups. Empty groups are dropped entirely so no
@@ -50,7 +51,9 @@ function joinGroups(groups) {
 
 module.exports = function initMenu(ctx) {
   // ── Translation helper (bound to ctx.lang via the shared i18n module) ──
-  const t = createTranslator(() => ctx.lang);
+  const translate = createTranslator(() => ctx.lang);
+  // desk-pet: menus say "Egg Tart" instead of "Clawd".
+  const t = (key) => (ctx.deskPetEdition === true ? renameForDeskPet(translate(key)) : translate(key));
   const macDockVisibility = isMac ? createMacDockVisibilityCoordinator({
     app,
     dock: app.dock,
@@ -260,7 +263,7 @@ module.exports = function initMenu(ctx) {
       iconPath: path.join(__dirname, "../assets/icon.png"),
     });
     ctx.tray = new Tray(icon);
-    ctx.tray.setToolTip("Clawd Desktop Pet");
+    ctx.tray.setToolTip(ctx.deskPetEdition === true ? DESK_PET_APP_NAME : "Clawd Desktop Pet");
     buildTrayMenu();
   }
 
