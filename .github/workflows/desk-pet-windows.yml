@@ -1,0 +1,84 @@
+# desk-pet: builds the bunny ("Bun") Windows installer on a real Windows
+# machine, checks its native payload, launches the installed-style app once and
+# screenshots the desktop. Upstream's build.yml (tags v*) stays untouched.
+name: Desk Pet Windows build
+
+on:
+  push:
+    branches:
+      - bunny-windows
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+
+      - name: Validate the bunny theme
+        run: node scripts/validate-theme.js themes/bunny
+      - name: Desk-pet and packaging tests
+        run: >-
+          node --test
+          test/bunny-theme.test.js test/sync-bunny-theme.test.js test/idle-activity-hobbies.test.js
+          test/desk-pet-edition.test.js test/desk-pet-name.test.js test/desk-pet-login-item.test.js
+          test/menu-desk-pet.test.js test/egg-tart-theme.test.js test/idle-visual.test.js
+          test/after-pack-koffi.test.js test/audit-packaged-native.test.js test/koffi-lockfile.test.js
+          test/native-package-target.test.js test/package-koffi-smoke.test.js test/package-build-config.test.js
+
+      - name: Build the x64 installer
+        run: npx electron-builder --win nsis:x64 --publish never
+      - name: Audit packaged native payloads
+        run: node scripts/audit-packaged-native.js --app-root dist/win-unpacked --target windows-x64 --output dist/native-package-manifests/windows-x64.json
+      - name: Packaged Koffi smoke
+        run: node scripts/run-packaged-koffi-smoke.js --executable "dist/win-unpacked/Bun.exe" --target windows-x64 --output dist/koffi-smoke/windows-x64.json
+
+      - name: Launch Bun and screenshot the desktop
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/smoke | Out-Null
+          Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+          $p = Start-Process -FilePath (Resolve-Path "dist/win-unpacked/Bun.exe") -PassThru
+          foreach ($t in 12, 24, 36, 48) {
+            Start-Sleep -Seconds 12
+            if ($p.HasExited) { throw "Bun exited after about $t s with code $($p.ExitCode)" }
+            $b = [System.Windows.Forms.SystemInformation]::VirtualScreen
+            $bmp = New-Object System.Drawing.Bitmap $b.Width, $b.Height
+            $g = [System.Drawing.Graphics]::FromImage($bmp)
+            $g.CopyFromScreen($b.Left, $b.Top, 0, 0, $bmp.Size)
+            $bmp.Save("dist/smoke/desktop-$($t)s.png")
+            $g.Dispose(); $bmp.Dispose()
+          }
+          Get-Process -Name Bun -ErrorAction SilentlyContinue | Format-Table Id, ProcessName, WorkingSet64 | Out-String | Write-Host
+          Stop-Process -Id $p.Id -Force
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bun-windows-installer
+          path: dist/*.exe
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bun-windows-checks
+          path: |
+            dist/smoke/*.png
+            dist/koffi-prune-manifests/*.json
+            dist/koffi-smoke/*.json
+            dist/native-package-manifests/*.json
+          if-no-files-found: warn
+
+      - name: Full test suite on Windows (informational)
+        continue-on-error: true
+        run: npm test
