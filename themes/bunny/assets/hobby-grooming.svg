@@ -11,15 +11,7 @@
       .gr-front-l { opacity: 0; animation: gr-front-l 13.8s infinite step-end; }
       .gr-front-r { opacity: 0; animation: gr-front-r 13.8s infinite step-end; }
       .gr-closed { animation: gr-closed 13.8s infinite step-end; }
-      .gr-happy { opacity: 0; animation: gr-happy 13.8s infinite step-end; }
-      .gr-spark-0-0 { opacity: 0; animation: gr-spark-0-0 13.8s infinite step-end; }
-      .gr-spark-0-1 { opacity: 0; animation: gr-spark-0-1 13.8s infinite step-end; }
-      .gr-spark-0-2 { opacity: 0; animation: gr-spark-0-2 13.8s infinite step-end; }
-      .gr-spark-0-3 { opacity: 0; animation: gr-spark-0-3 13.8s infinite step-end; }
-      .gr-spark-1-0 { opacity: 0; animation: gr-spark-1-0 13.8s infinite step-end; }
-      .gr-spark-1-1 { opacity: 0; animation: gr-spark-1-1 13.8s infinite step-end; }
-      .gr-spark-1-2 { opacity: 0; animation: gr-spark-1-2 13.8s infinite step-end; }
-      .gr-spark-1-3 { opacity: 0; animation: gr-spark-1-3 13.8s infinite step-end; }
+      .gr-open { opacity: 0; animation: gr-open 13.8s infinite step-end; }
       
       .arm-l { transform-box: fill-box; transform-origin: 100% 50%; }
       .arm-r { transform-box: fill-box; transform-origin: 0% 50%; }
@@ -370,16 +362,8 @@
       @keyframes gr-back-r { 0% { opacity: 1; } 0% { opacity: 1; } 61.594% { opacity: 0; } 84.058% { opacity: 1; } 100% { opacity: 0; } 100% { opacity: 1; } }
       @keyframes gr-front-l { 0% { opacity: 0; } 21.739% { opacity: 1; } 44.203% { opacity: 0; } 100% { opacity: 0; } }
       @keyframes gr-front-r { 0% { opacity: 0; } 61.594% { opacity: 1; } 84.058% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-closed { 0% { opacity: 1; } 0% { opacity: 1; } 90.217% { opacity: 0; } 97.101% { opacity: 1; } 100% { opacity: 0; } 100% { opacity: 1; } }
-      @keyframes gr-happy { 0% { opacity: 0; } 90.217% { opacity: 1; } 97.101% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-0-0 { 0% { opacity: 0; } 90.58% { opacity: 1; } 91.449% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-0-1 { 0% { opacity: 0; } 91.449% { opacity: 1; } 92.319% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-0-2 { 0% { opacity: 0; } 92.319% { opacity: 1; } 94.058% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-0-3 { 0% { opacity: 0; } 94.058% { opacity: 1; } 94.928% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-1-0 { 0% { opacity: 0; } 92.391% { opacity: 1; } 93.261% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-1-1 { 0% { opacity: 0; } 93.261% { opacity: 1; } 94.13% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-1-2 { 0% { opacity: 0; } 94.13% { opacity: 1; } 95.87% { opacity: 0; } 100% { opacity: 0; } }
-      @keyframes gr-spark-1-3 { 0% { opacity: 0; } 95.87% { opacity: 1; } 96.739% { opacity: 0; } 100% { opacity: 0; } }
+      @keyframes gr-closed { 0% { opacity: 1; } 0% { opacity: 1; } 89.855% { opacity: 0; } 97.101% { opacity: 1; } 100% { opacity: 0; } 100% { opacity: 1; } }
+      @keyframes gr-open { 0% { opacity: 0; } 89.855% { opacity: 1; } 97.101% { opacity: 0; } 100% { opacity: 0; } }
       @keyframes gr-paw-l {
       0% { transform: translate(2.05px, -0.3px) rotate(0deg); }
       0.725% { transform: translate(2.118px, -0.084px) rotate(2.881deg); }
@@ -1088,24 +1072,17 @@
   <rect x="4" y="24" width="24" height="1" fill="#AE9DB4"/>
   </g>
   </g>
-  <g class="gr-closed">
   <rect x="4" y="13" width="2" height="1" fill="#F2949C"/>
   <rect x="14" y="13" width="2" height="1" fill="#F2949C"/>
   <rect x="9" y="12" width="2" height="1" fill="#2B1A0E"/>
-  <g fill="none" stroke="#2B1A0E" stroke-width="0.95" stroke-linecap="round" stroke-linejoin="round">
+  <g class="gr-closed"><g fill="none" stroke="#2B1A0E" stroke-width="0.95" stroke-linecap="round" stroke-linejoin="round">
   <polyline class="free" points="4.96,11.39 5.57,11.88 6.1,12.01 6.63,11.88 7.24,11.39"/>
   <polyline class="free" points="12.76,11.39 13.37,11.88 13.9,12.01 14.43,11.88 15.04,11.39"/>
-  </g>
-  </g>
-  <g class="gr-happy">
-  <rect x="3" y="13" width="3" height="1" fill="#F2949C"/>
-  <rect x="14" y="13" width="3" height="1" fill="#F2949C"/>
-  <g fill="none" stroke="#2B1A0E" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"><polyline class="free" points="10.931,12.319 10.814,12.51 10.601,12.665 10.319,12.765 10,12.8 9.681,12.765 9.399,12.665 9.186,12.51 9.069,12.319"/></g>
-  <g fill="none" stroke="#2B1A0E" stroke-width="0.95" stroke-linecap="round" stroke-linejoin="round">
-  <polyline class="free" points="4.96,11.83 6.1,10.69 7.24,11.83"/>
-  <polyline class="free" points="12.76,11.83 13.9,10.69 15.04,11.83"/>
-  </g>
-  </g>
+  </g></g>
+  <g class="gr-open"><g fill="#2B1A0E">
+  <rect class="free" x="5.5" y="10.2" width="1.2" height="2.3"/>
+  <rect class="free" x="13.3" y="10.2" width="1.2" height="2.3"/>
+  </g></g>
   <g class="gr-ear-l"><g class="gr-front-l"><g transform="translate(2.8 -2.8) scale(0.6)">
   <rect x="2" y="0" width="1" height="1" fill="#FBF8FA"/>
   <rect x="2" y="0" width="1" height="2" fill="#FBF8FA"/>
@@ -1318,46 +1295,32 @@
   <rect x="4" y="17" width="1" height="1" fill="#F0E9F0"/>
   <rect x="5" y="17" width="1" height="1" fill="#AE9DB4"/>
   </g></g></g>
-  <rect class="free arm-l gr-paw-l" x="-1.4" y="11.6" width="2.6" height="2.6" fill="#F4EEF3" stroke="#BFAFC3" stroke-width="0.3"/>
-  <rect class="free arm-r gr-paw-r" x="18.8" y="11.6" width="2.6" height="2.6" fill="#F4EEF3" stroke="#BFAFC3" stroke-width="0.3"/>
+  <g class="free arm-l gr-paw-l"><g transform="translate(-1.6 11.4) scale(0.6)"><rect x="1" y="1" width="3" height="3" fill="#FBF8FA"/><rect x="1" y="0" width="2" height="1" fill="#CBBDCF"/>
+  <rect x="3" y="0" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="1" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="1" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="1" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="2" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="2" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="2" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="3" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="3" width="1" height="1" fill="#FBF8FA"/>
+  <rect x="2" y="3" width="2" height="1" fill="#F0E9F0"/>
+  <rect x="4" y="3" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="1" y="4" width="3" height="1" fill="#AE9DB4"/></g></g>
+  <g class="free arm-r gr-paw-r"><g transform="translate(18.6 11.4) scale(0.6)"><rect x="1" y="1" width="3" height="3" fill="#FBF8FA"/><rect x="1" y="0" width="2" height="1" fill="#CBBDCF"/>
+  <rect x="3" y="0" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="1" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="1" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="1" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="2" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="2" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="2" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="3" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="3" width="1" height="1" fill="#FBF8FA"/>
+  <rect x="2" y="3" width="2" height="1" fill="#F0E9F0"/>
+  <rect x="4" y="3" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="1" y="4" width="3" height="1" fill="#AE9DB4"/></g></g>
   </g>
   </g>
-  <g class="gr-spark-0-0"><g transform="translate(19.7 -0.9) scale(0.6)"><rect x="2" y="2" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-0-1"><g transform="translate(19.7 -0.9) scale(0.6)"><rect x="2" y="1" width="1" height="1" fill="#FFC21A"/>
-  <rect x="1" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="2" width="1" height="1" fill="#FFFFFF"/>
-  <rect x="3" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="3" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-0-2"><g transform="translate(19.7 -0.9) scale(0.6)"><rect x="2" y="0" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="1" width="1" height="1" fill="#FFE58A"/>
-  <rect x="0" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="1" y="2" width="1" height="1" fill="#FFE58A"/>
-  <rect x="2" y="2" width="1" height="1" fill="#FFFFFF"/>
-  <rect x="3" y="2" width="1" height="1" fill="#FFE58A"/>
-  <rect x="4" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="3" width="1" height="1" fill="#FFE58A"/>
-  <rect x="2" y="4" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-0-3"><g transform="translate(19.7 -0.9) scale(0.6)"><rect x="2" y="0" width="1" height="1" fill="#FFC21A"/>
-  <rect x="0" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="4" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="4" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-1-0"><g transform="translate(-3.1 2.9) scale(0.6)"><rect x="2" y="2" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-1-1"><g transform="translate(-3.1 2.9) scale(0.6)"><rect x="2" y="1" width="1" height="1" fill="#FFC21A"/>
-  <rect x="1" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="2" width="1" height="1" fill="#FFFFFF"/>
-  <rect x="3" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="3" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-1-2"><g transform="translate(-3.1 2.9) scale(0.6)"><rect x="2" y="0" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="1" width="1" height="1" fill="#FFE58A"/>
-  <rect x="0" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="1" y="2" width="1" height="1" fill="#FFE58A"/>
-  <rect x="2" y="2" width="1" height="1" fill="#FFFFFF"/>
-  <rect x="3" y="2" width="1" height="1" fill="#FFE58A"/>
-  <rect x="4" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="3" width="1" height="1" fill="#FFE58A"/>
-  <rect x="2" y="4" width="1" height="1" fill="#FFC21A"/></g></g>
-  <g class="gr-spark-1-3"><g transform="translate(-3.1 2.9) scale(0.6)"><rect x="2" y="0" width="1" height="1" fill="#FFC21A"/>
-  <rect x="0" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="4" y="2" width="1" height="1" fill="#FFC21A"/>
-  <rect x="2" y="4" width="1" height="1" fill="#FFC21A"/></g></g>
 </svg>

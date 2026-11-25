@@ -24,16 +24,14 @@
       .dw-ear-r { animation: dw-ear-r 14s infinite linear; }
       .dw-open { animation: dw-open 14s infinite step-end; }
       .dw-shut { opacity: 0; animation: dw-shut 14s infinite step-end; }
-      .dw-happy { opacity: 0; animation: dw-happy 14s infinite step-end; }
       .dw-look { animation: dw-look 14s infinite linear; }
       .dw-blink { transform-origin: 10px 11.35px; animation: dw-blink 14s infinite linear; }
       .dw-wiggle { transform-origin: 10px 12.5px; animation: dw-wiggle 14s infinite linear; }
       .dw-cheek { transform-box: fill-box; transform-origin: 50% 50%; animation: dw-cheek 14s infinite linear; }
-      .dw-m-smile { opacity: 0; animation: dw-m-smile 14s infinite step-end; }
+      .dw-m-bar { opacity: 0; animation: dw-m-bar 14s infinite step-end; }
       .dw-m-sniff { opacity: 0; animation: dw-m-sniff 14s infinite step-end; }
       .dw-m-held { opacity: 0; animation: dw-m-held 14s infinite step-end; }
       .dw-m-o { opacity: 0; animation: dw-m-o 14s infinite step-end; }
-      .dw-m-big { opacity: 0; animation: dw-m-big 14s infinite step-end; }
       @keyframes dw-body {
       0% { transform: rotate(0deg) scale(1, 1); }
       1.429% { transform: rotate(0deg) scale(1, 1); }
@@ -976,20 +974,12 @@
       0% { opacity: 1; }
       30.714% { opacity: 0; }
       42.5% { opacity: 1; }
-      67.143% { opacity: 0; }
-      75% { opacity: 1; }
       100% { opacity: 1; }
       }
       @keyframes dw-shut {
       0% { opacity: 0; }
       30.714% { opacity: 1; }
       42.5% { opacity: 0; }
-      100% { opacity: 0; }
-      }
-      @keyframes dw-happy {
-      0% { opacity: 0; }
-      67.143% { opacity: 1; }
-      75% { opacity: 0; }
       100% { opacity: 0; }
       }
       @keyframes dw-look {
@@ -1049,24 +1039,24 @@
       65% { transform: translate(0.526px, -0.929px); }
       65.714% { transform: translate(0.507px, -0.944px); }
       66.429% { transform: translate(0.5px, -0.95px); }
-      67.143% { transform: translate(0.502px, -0.949px); }
-      67.857% { transform: translate(0.506px, -0.947px); }
-      68.571% { transform: translate(0.513px, -0.943px); }
-      69.286% { transform: translate(0.523px, -0.939px); }
-      70% { transform: translate(0.534px, -0.933px); }
-      70.714% { transform: translate(0.547px, -0.926px); }
-      71.429% { transform: translate(0.561px, -0.919px); }
-      72.143% { transform: translate(0.577px, -0.912px); }
-      72.857% { transform: translate(0.592px, -0.904px); }
-      73.571% { transform: translate(0.608px, -0.896px); }
-      74.286% { transform: translate(0.623px, -0.888px); }
-      75% { transform: translate(0.639px, -0.881px); }
-      75.714% { transform: translate(0.653px, -0.874px); }
-      76.429% { transform: translate(0.666px, -0.867px); }
-      77.143% { transform: translate(0.677px, -0.861px); }
-      77.857% { transform: translate(0.687px, -0.857px); }
-      78.571% { transform: translate(0.694px, -0.853px); }
-      79.286% { transform: translate(0.698px, -0.851px); }
+      67.143% { transform: translate(0.508px, -0.951px); }
+      67.857% { transform: translate(0.531px, -0.955px); }
+      68.571% { transform: translate(0.565px, -0.961px); }
+      69.286% { transform: translate(0.606px, -0.968px); }
+      70% { transform: translate(0.65px, -0.975px); }
+      70.714% { transform: translate(0.694px, -0.982px); }
+      71.429% { transform: translate(0.735px, -0.989px); }
+      72.143% { transform: translate(0.769px, -0.995px); }
+      72.857% { transform: translate(0.792px, -0.999px); }
+      73.571% { transform: translate(0.8px, -1px); }
+      74.286% { transform: translate(0.797px, -0.995px); }
+      75% { transform: translate(0.787px, -0.981px); }
+      75.714% { transform: translate(0.774px, -0.961px); }
+      76.429% { transform: translate(0.758px, -0.937px); }
+      77.143% { transform: translate(0.742px, -0.913px); }
+      77.857% { transform: translate(0.726px, -0.889px); }
+      78.571% { transform: translate(0.713px, -0.869px); }
+      79.286% { transform: translate(0.703px, -0.855px); }
       80% { transform: translate(0.7px, -0.85px); }
       80.714% { transform: translate(0.69px, -0.756px); }
       81.429% { transform: translate(0.665px, -0.533px); }
@@ -1207,25 +1197,14 @@
       47.143% { transform: scale(1.046, 1.037); }
       47.857% { transform: scale(1.006, 1.004); }
       48.571% { transform: scale(1, 1); }
-      67.143% { transform: scale(1, 1); }
-      67.857% { transform: scale(1.065, 1.052); }
-      68.571% { transform: scale(1.185, 1.148); }
-      69.286% { transform: scale(1.25, 1.2); }
-      75% { transform: scale(1.25, 1.2); }
-      75.714% { transform: scale(1.211, 1.169); }
-      76.429% { transform: scale(1.125, 1.1); }
-      77.143% { transform: scale(1.039, 1.031); }
-      77.857% { transform: scale(1, 1); }
       100% { transform: scale(1, 1); }
       }
-      @keyframes dw-m-smile {
+      @keyframes dw-m-bar {
       0% { opacity: 1; }
       18.929% { opacity: 0; }
       27.857% { opacity: 1; }
       32.857% { opacity: 0; }
       53.571% { opacity: 1; }
-      67.143% { opacity: 0; }
-      75% { opacity: 1; }
       100% { opacity: 1; }
       }
       @keyframes dw-m-sniff {
@@ -1246,12 +1225,6 @@
       53.571% { opacity: 0; }
       100% { opacity: 0; }
       }
-      @keyframes dw-m-big {
-      0% { opacity: 0; }
-      67.143% { opacity: 1; }
-      75% { opacity: 0; }
-      100% { opacity: 0; }
-      }
       
       .arm-l { transform-box: fill-box; transform-origin: 100% 50%; }
       .arm-r { transform-box: fill-box; transform-origin: 0% 50%; }
@@ -1269,7 +1242,19 @@
   </defs>
   <g><rect x="3" y="20" width="14" height="1" fill="#000" opacity="0.5"/></g>
   <g class="dw-body">
-  <rect class="free arm-l" x="-0.9999999999999999" y="14" width="2.6" height="2.6" fill="#F4EEF3" stroke="#BFAFC3" stroke-width="0.3"/>
+  <g class="free arm-l"><g transform="translate(-1.2 13.8) scale(0.6)"><rect x="1" y="1" width="3" height="3" fill="#FBF8FA"/><rect x="1" y="0" width="2" height="1" fill="#CBBDCF"/>
+  <rect x="3" y="0" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="1" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="1" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="1" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="2" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="2" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="2" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="3" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="3" width="1" height="1" fill="#FBF8FA"/>
+  <rect x="2" y="3" width="2" height="1" fill="#F0E9F0"/>
+  <rect x="4" y="3" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="1" y="4" width="3" height="1" fill="#AE9DB4"/></g></g>
   <g class="ear-l dw-ear-l">
   <g transform="translate(2.8 -2.8) scale(0.6)">
   <rect x="2" y="0" width="1" height="1" fill="#FBF8FA"/>
@@ -1714,11 +1699,10 @@
   <rect class="dw-cheek" x="4" y="13" width="2" height="1"/>
   <rect class="dw-cheek" x="14" y="13" width="2" height="1"/>
   </g>
-  <g class="dw-m-smile"><g fill="none" stroke="#2B1A0E" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"><polyline class="free" points="9.05,12.2 9.5,12.62 10,12.78 10.5,12.62 10.95,12.2"/></g></g>
-  <g class="dw-m-sniff"><g class="dw-wiggle" fill="none" stroke="#2B1A0E" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"><polyline class="free" points="9.05,12.25 9.52,12.68 10,12.38 10.48,12.68 10.95,12.25"/></g></g>
+  <g class="dw-m-bar"><rect x="9" y="12" width="2" height="1" fill="#2B1A0E"/></g>
+  <g class="dw-m-sniff"><g class="dw-wiggle" fill="none" stroke="#2B1A0E" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"><polyline class="free" points="9.4,12.5 10.6,12.5"/></g></g>
   <g class="dw-m-held"><rect class="free" x="9.45" y="12.25" width="1.1" height="0.55" rx="0.25" fill="#2B1A0E" shape-rendering="geometricPrecision"/></g>
   <g class="dw-m-o"><rect class="free" x="9.5" y="11.85" width="1.2" height="1.25" rx="0.58" fill="#2B1A0E" shape-rendering="geometricPrecision"/></g>
-  <g class="dw-m-big"><g fill="none" stroke="#2B1A0E" stroke-width="0.65" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision"><polyline class="free" points="8.75,12.1 9.3,12.68 10,12.9 10.7,12.68 11.25,12.1"/></g></g>
   <g class="dw-open"><g class="dw-look" fill="#2B1A0E"><g class="dw-blink">
     <rect class="free" x="5.5" y="10.2" width="1.2" height="2.3"/>
     <rect class="free" x="13.3" y="10.2" width="1.2" height="2.3"/>
@@ -1726,10 +1710,6 @@
   <g class="dw-shut" fill="none" stroke="#2B1A0E" stroke-width="0.95" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision">
   <polyline class="free" points="4.96,11.39 5.57,11.88 6.1,12.01 6.63,11.88 7.24,11.39"/>
   <polyline class="free" points="12.76,11.39 13.37,11.88 13.9,12.01 14.43,11.88 15.04,11.39"/>
-  </g>
-  <g class="dw-happy" fill="none" stroke="#2B1A0E" stroke-width="0.95" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision">
-  <polyline class="free" points="4.96,11.83 6.1,10.69 7.24,11.83"/>
-  <polyline class="free" points="12.76,11.83 13.9,10.69 15.04,11.83"/>
   </g>
   <!-- /face -->
   <g class="dw-hand">
@@ -2301,7 +2281,19 @@
   <rect x="15" y="16" width="1" height="1" fill="#AE9DB4"/>
   </g></g>
   </g>
-  <rect class="free arm-r" x="17.5" y="14.2" width="2.6" height="2.6" fill="#F4EEF3" stroke="#BFAFC3" stroke-width="0.3"/>
+  <g class="free arm-r"><g transform="translate(17.3 14) scale(0.6)"><rect x="1" y="1" width="3" height="3" fill="#FBF8FA"/><rect x="1" y="0" width="2" height="1" fill="#CBBDCF"/>
+  <rect x="3" y="0" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="1" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="1" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="1" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="2" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="2" width="3" height="1" fill="#FBF8FA"/>
+  <rect x="4" y="2" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="0" y="3" width="1" height="1" fill="#CBBDCF"/>
+  <rect x="1" y="3" width="1" height="1" fill="#FBF8FA"/>
+  <rect x="2" y="3" width="2" height="1" fill="#F0E9F0"/>
+  <rect x="4" y="3" width="1" height="1" fill="#AE9DB4"/>
+  <rect x="1" y="4" width="3" height="1" fill="#AE9DB4"/></g></g>
   </g>
   </g>
   <g class="dw-seed-0"><g transform="translate(-1.12 -0.32) scale(0.32)"><rect x="0" y="0" width="1" height="1" fill="#AE9DB4"/>

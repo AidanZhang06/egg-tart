@@ -80,13 +80,18 @@
   },
   "idleAnimations": [
     {
+      "file": "hobby-baozi.svg",
+      "duration": 13000,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-carrot.svg",
       "duration": 12000,
       "mirrorOnRightSide": true
     },
     {
       "file": "hobby-clipboard.svg",
-      "duration": 13000,
+      "duration": 12300,
       "mirrorOnRightSide": true
     },
     {
@@ -100,8 +105,18 @@
       "mirrorOnRightSide": true
     },
     {
+      "file": "hobby-icecream.svg",
+      "duration": 14000,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-stethoscope.svg",
       "duration": 13000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-teddy.svg",
+      "duration": 13900,
       "mirrorOnRightSide": true
     }
   ],

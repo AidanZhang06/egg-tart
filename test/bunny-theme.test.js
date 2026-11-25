@@ -55,6 +55,9 @@ describe("bunny theme", () => {
     const hobbies = fs.readdirSync(ASSETS_DIR).filter((file) => /^hobby-.*\.svg$/.test(file)).sort();
     assert.deepEqual(theme.idleAnimations.map((entry) => entry.file).sort(), hobbies);
     assert.ok(hobbies.length >= 3, "carrot, washing up and dandelion at least");
+    // Nothing in assets/ sits unused: every file is a state, a reaction or a hobby.
+    const unused = fs.readdirSync(ASSETS_DIR).filter((file) => file.endsWith(".svg") && !referenced.includes(file));
+    assert.deepEqual(unused, []);
   });
 
   it("uses the egg tart's canvas, ground and eye tracking", () => {
