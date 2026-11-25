@@ -8,7 +8,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 const { listIdleActivityCandidates, pickDuration } = require("../src/idle-activity");
-const { loopMs } = require("../scripts/sync-bunny-theme");
+const { loopMs, animationDurations, isAmbientAnimation } = require("../scripts/sync-bunny-theme");
 const { DESK_PET_THEME_ID } = require("../src/desk-pet-edition");
 
 const THEME_DIR = path.join(__dirname, "..", "themes", "bunny");
@@ -95,6 +95,11 @@ describe("bunny theme", () => {
       assert.ok(loop > 0, `${entry.file} has an animation`);
       assert.ok(entry.duration >= 2000 && entry.duration <= 20000, `${entry.file}: ${entry.duration}`);
       assert.equal(entry.duration % loop, 0, `${entry.file}: ${entry.duration} ms is not whole ${loop} ms loops`);
+      // Every scene animation (all but the shared ear bob/twitch) ends on a whole cycle.
+      for (const { name, ms } of animationDurations(fs.readFileSync(path.join(ASSETS_DIR, entry.file), "utf8"))) {
+        if (isAmbientAnimation(name)) continue;
+        assert.equal(entry.duration % ms, 0, `${entry.file}: ${name || "animation"} (${ms} ms) stops mid-cycle at ${entry.duration} ms`);
+      }
     }
     // Each hobby is its own rotation slot at its own length.
     const slots = listIdleActivityCandidates(theme).filter((candidate) => candidate.files[0].startsWith("hobby-"));

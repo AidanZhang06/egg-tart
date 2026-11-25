@@ -85,6 +85,11 @@
       "mirrorOnRightSide": true
     },
     {
+      "file": "hobby-bubbletea.svg",
+      "duration": 10000,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-carrot.svg",
       "duration": 12000,
       "mirrorOnRightSide": true
@@ -95,8 +100,23 @@
       "mirrorOnRightSide": true
     },
     {
+      "file": "hobby-coding.svg",
+      "duration": 16000,
+      "mirrorOnRightSide": false
+    },
+    {
+      "file": "hobby-crochet.svg",
+      "duration": 14400,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-dandelion.svg",
       "duration": 14000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-gardening.svg",
+      "duration": 16000,
       "mirrorOnRightSide": true
     },
     {
@@ -110,6 +130,26 @@
       "mirrorOnRightSide": true
     },
     {
+      "file": "hobby-music.svg",
+      "duration": 16000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-painting.svg",
+      "duration": 12000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-reading.svg",
+      "duration": 16000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-science.svg",
+      "duration": 16000,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-stethoscope.svg",
       "duration": 13000,
       "mirrorOnRightSide": true
@@ -117,6 +157,16 @@
     {
       "file": "hobby-teddy.svg",
       "duration": 13900,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-tv.svg",
+      "duration": 12000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-weights.svg",
+      "duration": 12000,
       "mirrorOnRightSide": true
     }
   ],

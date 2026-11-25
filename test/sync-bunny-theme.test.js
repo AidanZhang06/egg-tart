@@ -43,6 +43,19 @@ describe("loop lengths", () => {
     assert.equal(loopMs("<svg/>"), 0);
   });
 
+  it("leaves out the shared ear layer, which runs on its own clock", () => {
+    // The weights scene loops every 4 s under the ears' 7 s twitch.
+    const weights = "<style>.l { animation: wt-lift 4s infinite ease-in-out; } "
+      + ".el { animation: twitch-l 7s infinite; } .bl { animation: bob-l 1.4s infinite; }</style>";
+    assert.equal(loopMs(weights), 4000);
+    assert.equal(hobbyDuration(loopMs(weights)), 12000);
+    // Ears alone still count, rather than no loop at all.
+    assert.equal(loopMs("<style>.e { animation: twitch-r 7s infinite; }</style>"), 7000);
+    // A second time in the shorthand is a delay, not a longer loop.
+    assert.equal(loopMs("<style>.a { animation: a 3s 9s infinite; }</style>"), 3000);
+    assert.equal(loopMs("<style>.a { animation: a 2s infinite, b 6s infinite; }</style>"), 6000);
+  });
+
   it("plays whole loops close to 12 s and never past 20 s", () => {
     assert.equal(hobbyDuration(12000), 12000);
     assert.equal(hobbyDuration(14000), 14000);

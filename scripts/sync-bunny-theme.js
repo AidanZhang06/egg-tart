@@ -12,7 +12,8 @@
 //   • binds each state to <state>.svg when the art exists, and otherwise to its
 //     fallback (STATE_FALLBACKS), so new state art is picked up by name;
 //   • registers every hobby-*.svg as an idle animation that plays whole loops of
-//     its own animation (the longest CSS animation in the file), about 12 s;
+//     its own animation (the scene's longest CSS animation, not counting the
+//     shared ear bob/twitch), about 12 s;
 //     hand-set fields on an existing entry (mirrorOnRightSide, activityGroup)
 //     are kept, and new hobbies mirror near the right screen edge;
 //   • binds the click reactions to react-left/right/double.svg when they exist,
@@ -65,17 +66,47 @@ const REACTION_ART = {
 const REACTION_FALLBACK_FILE = "attention.svg";
 const REACTION_FALLBACK_MS = 2800;
 
-/** The longest CSS animation duration in an SVG, in ms (0 when none). */
-function loopMs(svgText) {
-  let longest = 0;
+// Every bunny frame carries the same ear layer (bob-* 1.4 s, twitch-* 7 s) on
+// its own clock. It says nothing about how long the scene loops — the weights
+// scene loops every 4 s under a 7 s ear twitch — so loop lengths skip it.
+const AMBIENT_ANIMATION_RE = /^(?:bob|twitch)-/;
+
+/**
+ * Every CSS animation in an SVG as { name, ms } (name is null for a bare
+ * animation-duration). In the shorthand the first time is the duration; a
+ * second one would be the delay.
+ */
+function animationDurations(svgText) {
+  const out = [];
   const decls = String(svgText).match(/animation(?:-duration)?\s*:[^;}"]*/g) || [];
   for (const decl of decls) {
-    for (const m of decl.matchAll(/(?:^|[\s,:])(\d+(?:\.\d+)?|\.\d+)(ms|s)\b/g)) {
-      const ms = m[2] === "ms" ? Number(m[1]) : Number(m[1]) * 1000;
-      if (Number.isFinite(ms) && ms > longest) longest = ms;
+    const shorthand = /^animation\s*:/.test(decl);
+    for (const part of decl.slice(decl.indexOf(":") + 1).split(",")) {
+      const time = part.match(/(?:^|\s)(\d+(?:\.\d+)?|\.\d+)(ms|s)\b/);
+      if (!time) continue;
+      const ms = time[2] === "ms" ? Number(time[1]) : Number(time[1]) * 1000;
+      if (!Number.isFinite(ms) || ms <= 0) continue;
+      const name = shorthand ? (part.trim().match(/^([A-Za-z_][\w-]*)/) || [])[1] || null : null;
+      out.push({ name, ms });
     }
   }
-  return Math.round(longest);
+  return out;
+}
+
+/** An animation that belongs to the shared ear layer, not to the scene. */
+function isAmbientAnimation(name) {
+  return typeof name === "string" && AMBIENT_ANIMATION_RE.test(name);
+}
+
+/**
+ * A scene's loop in ms: its longest CSS animation, leaving out the shared ear
+ * layer (or the longest of all when the file has nothing else). 0 when none.
+ */
+function loopMs(svgText) {
+  const all = animationDurations(svgText);
+  const scene = all.filter((animation) => !isAmbientAnimation(animation.name));
+  const longest = (list) => list.reduce((max, animation) => Math.max(max, animation.ms), 0);
+  return Math.round(longest(scene) || longest(all));
 }
 
 /** Whole loops of `loop` ms, close to HOBBY_TARGET_MS and within HOBBY_MAX_MS. */
@@ -177,7 +208,7 @@ function syncBunnyTheme({ sourceDir, themeDir }) {
   };
 }
 
-module.exports = { syncBunnyTheme, loopMs, hobbyDuration, STATE_FALLBACKS };
+module.exports = { syncBunnyTheme, loopMs, hobbyDuration, animationDurations, isAmbientAnimation, STATE_FALLBACKS };
 
 if (require.main === module) {
   const args = process.argv.slice(2);
