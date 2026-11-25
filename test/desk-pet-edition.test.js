@@ -37,10 +37,10 @@ describe("desk pet first-run defaults", () => {
     assert.strictEqual(seed.agents.codex.enabled, false);
   });
 
-  it("seed picks the egg tart theme", () => {
+  it("seed picks the bunny theme", () => {
     const seed = applyDeskPetFirstRunDefaults(prefs.getDefaults());
-    assert.strictEqual(seed.theme, "egg-tart");
-    assert.strictEqual(prefs.validate(seed).theme, "egg-tart");
+    assert.strictEqual(seed.theme, "bunny");
+    assert.strictEqual(prefs.validate(seed).theme, "bunny");
   });
 
   it("seed turns off agent automation, tutorial and updates", () => {

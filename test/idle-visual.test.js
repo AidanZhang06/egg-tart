@@ -30,6 +30,13 @@ describe("listIdleVisualOptions", () => {
       calico: ["calico-idle-follow.svg", "calico-idle.apng"],
       clawd: ["clawd-idle-follow.svg", "clawd-idle-look.svg", "clawd-idle-bubble.svg", "clawd-idle-reading.svg"],
       cloudling: ["cloudling-idle.svg", "cloudling-idle-reading.svg"],
+      // desk-pet: built-in bunny theme; its art is still growing, so its
+      // hobby list is read from the theme (test/bunny-theme.test.js checks it).
+      bunny: [
+        "idle.svg",
+        ...JSON.parse(fs.readFileSync(path.join(__dirname, "..", "themes", "bunny", "theme.json"), "utf8"))
+          .idleAnimations.map((entry) => entry.file),
+      ],
       // desk-pet: built-in Egg Tart theme; its hobby scenes are idle animations.
       "egg-tart": [
         "idle.svg",

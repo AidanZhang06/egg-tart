@@ -52,7 +52,7 @@ function joinGroups(groups) {
 module.exports = function initMenu(ctx) {
   // ── Translation helper (bound to ctx.lang via the shared i18n module) ──
   const translate = createTranslator(() => ctx.lang);
-  // desk-pet: menus say "Egg Tart" instead of "Clawd".
+  // desk-pet: menus say the pet's name ("Bun") instead of "Clawd".
   const t = (key) => (ctx.deskPetEdition === true ? renameForDeskPet(translate(key)) : translate(key));
   const macDockVisibility = isMac ? createMacDockVisibilityCoordinator({
     app,

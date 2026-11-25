@@ -22706,10 +22706,10 @@ describe("issue #1323: theme appearance refreshes animation data", () => {
 
 
 describe("desk pet About tab", () => {
-  it("shows the Egg Tart name and tagline", () => {
+  it("shows the Bun name and tagline", () => {
     const { content } = loadAboutTabForTest({ deskPet: true });
-    assert.equal(content.querySelector(".about-title").textContent, "Egg Tart");
-    assert.equal(content.querySelector(".about-crab-wrap").title, "Egg Tart");
+    assert.equal(content.querySelector(".about-title").textContent, "Bun");
+    assert.equal(content.querySelector(".about-crab-wrap").title, "Bun");
     assert.equal(content.querySelector(".about-tagline").textContent, "aboutTaglineDeskPet");
   });
 
@@ -22719,7 +22719,7 @@ describe("desk pet About tab", () => {
     assert.equal(content.querySelector(".about-tagline").textContent, "aboutTagline");
   });
 
-  it("has an Egg Tart tagline in every Settings locale", () => {
+  it("has a bunny tagline in every Settings locale", () => {
     const source = fs.readFileSync(path.join(SRC_DIR, "settings-i18n.js"), "utf8");
     assert.equal((source.match(/^\s+aboutTaglineDeskPet: "/gm) || []).length, 7);
   });

@@ -18,7 +18,7 @@
   }
 
   const i18nApi = root.ClawdSettingsI18n || {};
-  // desk-pet: show the pet's own name ("Egg Tart") instead of "Clawd".
+  // desk-pet: show the pet's own name ("Bun") instead of "Clawd".
   const deskPetNameApi = root.ClawdDeskPetName || null;
   function renameText(text) {
     return deskPetNameApi && typeof deskPetNameApi.renameForDeskPet === "function"

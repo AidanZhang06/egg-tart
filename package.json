@@ -29,6 +29,8 @@
     "generate:readme-contributors": "node scripts/generate-readme-contributors.js",
     "create-theme": "node scripts/create-theme.js",
     "sync:egg-tart": "node scripts/sync-egg-tart-theme.js",
+    "sync:bunny": "node scripts/sync-bunny-theme.js",
+    "icons:bunny": "node scripts/make-bunny-icons.js",
     "export-agent-icons": "node scripts/export-agent-icons.js",
     "install:claude-hooks": "node hooks/install.js",
     "uninstall:claude-hooks": "node hooks/uninstall.js",
@@ -91,8 +93,8 @@
   "license": "AGPL-3.0-only",
   "type": "commonjs",
   "build": {
-    "appId": "com.clawd.desk-pet",
-    "productName": "Egg Tart",
+    "appId": "com.clawd.desk-pet.bun",
+    "productName": "Bun",
     "afterPack": "scripts/after-pack-koffi.js",
     "protocols": [
       {
@@ -103,9 +105,9 @@
       }
     ],
     "mac": {
-      "icon": "assets/icon.png",
+      "icon": "assets/dock-icon.png",
       "identity": "-",
-      "artifactName": "Egg-Tart-${version}-${arch}.${ext}",
+      "artifactName": "Bun-${version}-${arch}.${ext}",
       "target": [
         {
           "target": "dmg",
@@ -129,7 +131,7 @@
     },
     "win": {
       "icon": "assets/icon.ico",
-      "artifactName": "Clawd-on-Desk-Setup-${version}-${arch}.${ext}",
+      "artifactName": "Bun-Setup-${version}-${arch}.${ext}",
       "target": [
         {
           "target": "nsis",

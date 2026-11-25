@@ -113,11 +113,11 @@ function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 }
 
-// desk-pet: the standalone build ships the egg tart menu-bar icon, so checks
+// desk-pet: the standalone build ships its pet's menu-bar icon, so checks
 // of Clawd's own mark geometry (center gap, edge-to-edge canvas, completion
 // flash = mark + cue) do not apply; the size/format checks still run.
 const CLAWD_MARK_REPLACED = require("../src/desk-pet-edition").DESK_PET_EDITION
-  ? "desk-pet build ships the egg tart menu-bar icon instead of the Clawd mark"
+  ? "desk-pet build ships its pet's menu-bar icon instead of the Clawd mark"
   : false;
 
 describe("macOS tray Template assets", () => {

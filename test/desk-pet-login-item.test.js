@@ -65,7 +65,9 @@ describe("main.js wiring", () => {
     assert.ok(at >= 0);
     const next = main.slice(at, at + 400);
     assert.ok(next.includes("maybeEnableDeskPetLoginItem();"), "called after hydration");
-    assert.match(main, /function maybeEnableDeskPetLoginItem\(\) \{\n  if \(!DESK_PET_EDITION \|\| !isMac\) return;/);
+    assert.match(main, /function maybeEnableDeskPetLoginItem\(\) \{\n  if \(!DESK_PET_EDITION \|\| !\(isMac \|\| isWin\)\) return;/);
+    // Windows: only the installed (packaged) app, never a run from source.
+    assert.ok(main.includes(": app.isPackaged === true),"));
     assert.ok(main.includes('_settingsController.applyUpdate("openAtLogin", true)'));
     assert.ok(main.includes("app.isInApplicationsFolder()"));
   });

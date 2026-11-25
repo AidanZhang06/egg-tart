@@ -226,7 +226,7 @@ describe("desk pet size menu", () => {
 });
 
 describe("desk pet menu naming", () => {
-  it("uses the Egg Tart name in the menus and the menu-bar tooltip", () => {
+  it("uses the Bun name in the menus and the menu-bar tooltip", () => {
     const initMenu = loadMenu();
     let tooltip = null;
     const ctx = buildCtx({ deskPetEdition: true, doNotDisturb: true });
@@ -234,10 +234,10 @@ describe("desk pet menu naming", () => {
     menu.createTray();
     tooltip = ctx.tray.tooltip;
     menu.buildContextMenu();
-    assert.equal(tooltip, "Egg Tart");
+    assert.equal(tooltip, "Bun");
     for (const template of [ctx.tray.contextMenu.template, ctx.contextMenu.template]) {
       const labels = labelsOf(template);
-      assert.ok(labels.includes("Wake Egg Tart"), labels.join(" | "));
+      assert.ok(labels.includes("Wake Bun"), labels.join(" | "));
       assert.ok(!labels.some((label) => /Clawd/.test(label)), "no Clawd in desk pet menus");
     }
   });

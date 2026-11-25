@@ -56,11 +56,14 @@ function normalizeFrequency(value) {
 function listIdleActivityStates(theme) {
   const states = theme && theme.states;
   if (!states || typeof states !== "object") return [];
+  // desk-pet: a state that only borrows the resting sprite (a theme without art
+  // for it yet, e.g. the bunny's working/thinking) would be a no-op beat.
+  const idleFile = Array.isArray(states.idle) ? states.idle[0] : null;
   const result = [];
   for (const [state, files] of Object.entries(states)) {
     if (EXCLUDED_STATES.has(state) || state.startsWith("mini-")) continue;
     if (!Array.isArray(files)) continue;
-    const usable = files.filter((file) => typeof file === "string" && file);
+    const usable = files.filter((file) => typeof file === "string" && file && file !== idleFile);
     if (usable.length > 0) result.push({ state, files: usable });
   }
   return result;

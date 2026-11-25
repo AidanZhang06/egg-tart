@@ -15,6 +15,10 @@
 
 const DESK_PET_EDITION = true;
 
+// The built-in theme this build ships as its pet (themes/<id>). The bunny
+// branch ships the white bunny; the egg tart stays selectable in Settings.
+const DESK_PET_THEME_ID = "bunny";
+
 // Idle-activity spacing for the standalone pet (ms). Tighter than upstream's
 // scale, which is tuned to sit quietly beside a coding agent, so the pet is
 // rarely idle for long. Same keys as Settings → Pet → How often.
@@ -36,8 +40,8 @@ function applyDeskPetFirstRunDefaults(snapshot) {
   return {
     ...base,
     agents,
-    // The built-in Egg Tart theme (themes/egg-tart) is this build's pet.
-    theme: "egg-tart",
+    // The built-in bunny theme (themes/bunny) is this build's pet.
+    theme: DESK_PET_THEME_ID,
     freeRoam: true,
     idleActivities: true,
     // "high" = an activity every 10–20 s on the desk pet's own scale
@@ -93,6 +97,7 @@ async function enableLoginItemOnce({ markerExists, isInApplicationsFolder, enabl
 
 module.exports = {
   DESK_PET_EDITION,
+  DESK_PET_THEME_ID,
   enableLoginItemOnce,
   DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
   applyDeskPetFirstRunDefaults,

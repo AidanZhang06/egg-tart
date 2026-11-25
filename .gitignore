@@ -142,6 +142,9 @@ scripts/apt/__pycache__/
 !scripts/update-official-theme-catalog-snapshot.js
 # desk-pet: keeps themes/egg-tart in step with the art folder
 !scripts/sync-egg-tart-theme.js
+# desk-pet: keeps themes/bunny and the bunny app icons in step with its art
+!scripts/sync-bunny-theme.js
+!scripts/make-bunny-icons.js
 !scripts/manual/
 scripts/manual/*
 !scripts/manual/README.md

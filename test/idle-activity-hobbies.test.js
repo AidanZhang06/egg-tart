@@ -165,3 +165,22 @@ test("a theme's idleActivityDurations sets a state's exact whole-loop duration",
   // States without an entry keep the upstream autoReturn-based behavior.
   assert.equal(pickDuration({ idleActivityDurations: {} }, "sweeping", () => 0), 2550);
 });
+
+test("states that only borrow the idle sprite never become activity beats", () => {
+  // A theme without working/thinking art yet binds them to its idle file (the
+  // validator requires files); picking them would just show idle.
+  const theme = {
+    states: {
+      idle: ["idle.svg"],
+      working: ["idle.svg"],
+      thinking: ["idle.svg", "think.svg"],
+      attention: ["happy.svg"],
+    },
+    idleAnimations: [{ file: "hobby-carrot.svg", duration: 12000 }],
+  };
+  assert.deepEqual(listIdleActivityCandidates(theme), [
+    { state: "thinking", files: ["think.svg"] },
+    { state: "attention", files: ["happy.svg"] },
+    { state: "idle", files: ["hobby-carrot.svg"], duration: 12000 },
+  ]);
+});

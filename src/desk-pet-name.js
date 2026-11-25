@@ -1,6 +1,7 @@
 "use strict";
 
-// src/desk-pet-name.js — desk-pet: the standalone build is called "Egg Tart".
+// src/desk-pet-name.js — desk-pet: the standalone build is named after its pet
+// (this branch: "Bun", the white bunny; the Mac egg tart build: "Egg Tart").
 //
 // Upstream UI text says "Clawd" / "Clawd on Desk". renameForDeskPet swaps that
 // capitalised brand word for the pet's name wherever the menus, the Settings
@@ -11,7 +12,7 @@
 // settings.html (exposed as globalThis.ClawdDeskPetName).
 
 (function initDeskPetName(root) {
-  const DESK_PET_APP_NAME = "Egg Tart";
+  const DESK_PET_APP_NAME = "Bun";
   const BRAND_RE = /\bClawd on Desk\b|\bClawd\b/g;
 
   function renameForDeskPet(text) {

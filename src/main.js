@@ -353,6 +353,7 @@ const prefsModule = require("./prefs");
 // desk-pet: fork switch + first-run defaults (see src/desk-pet-edition.js).
 const {
   DESK_PET_EDITION,
+  DESK_PET_THEME_ID,
   DESK_PET_IDLE_ACTIVITY_FREQUENCIES,
   applyDeskPetToLoadResult,
   gateUpdaterForDeskPet,
@@ -822,14 +823,18 @@ function hydrateSystemBackedSettings() {
   }
 }
 
-// desk-pet: switch Start on Login on by itself, once, the first time Egg Tart
-// runs from /Applications, so she never has to find the setting.
+// desk-pet: switch Start on Login on by itself, once, the first time the pet
+// runs installed, so it never has to be found in Settings: on macOS from
+// /Applications (not the mounted .dmg), on Windows the installed app (a run
+// from source is not packaged).
 function maybeEnableDeskPetLoginItem() {
-  if (!DESK_PET_EDITION || !isMac) return;
+  if (!DESK_PET_EDITION || !(isMac || isWin)) return;
   const markerPath = path.join(app.getPath("userData"), "desk-pet-login-item.json");
   void enableLoginItemOnce({
     markerExists: () => fs.existsSync(markerPath),
-    isInApplicationsFolder: () => typeof app.isInApplicationsFolder === "function" && app.isInApplicationsFolder(),
+    isInApplicationsFolder: () => (isMac
+      ? typeof app.isInApplicationsFolder === "function" && app.isInApplicationsFolder()
+      : app.isPackaged === true),
     enable: () => _settingsController.applyUpdate("openAtLogin", true),
     writeMarker: () => fs.writeFileSync(markerPath, JSON.stringify({ enabledAt: new Date().toISOString() }) + "\n"),
   }).then((outcome) => {
@@ -5444,9 +5449,9 @@ const settingsIpcRuntime = registerSettingsIpc({
     _tutorial.open();
     return { status: "ok" };
   },
-  // desk-pet: Settings → About shows the egg tart (written by the theme sync).
+  // desk-pet: Settings → About shows the pet (written by the theme sync).
   aboutHeroSvgPath: DESK_PET_EDITION
-    ? path.join(__dirname, "..", "themes", "egg-tart", "about-hero.svg")
+    ? path.join(__dirname, "..", "themes", DESK_PET_THEME_ID, "about-hero.svg")
     : path.join(__dirname, "..", "assets", "svg", "clawd-about-hero.svg"),
   getLanWsServer: () => _lanWss,
 });
