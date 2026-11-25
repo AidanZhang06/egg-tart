@@ -60,7 +60,7 @@ describe("enableLoginItemOnce", () => {
 
 describe("main.js wiring", () => {
   it("tries it right after the login setting is read from the system", () => {
-    const main = fs.readFileSync(path.join(__dirname, "..", "src", "main.js"), "utf8");
+    const main = fs.readFileSync(path.join(__dirname, "..", "src", "main.js"), "utf8").replace(/\r\n/g, "\n");
     const at = main.indexOf("    hydrateSystemBackedSettings();\n");
     assert.ok(at >= 0);
     const next = main.slice(at, at + 400);

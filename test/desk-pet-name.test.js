@@ -39,23 +39,23 @@ describe("Bun naming is wired in", () => {
   });
 
   it("loads the renamer before the Settings text code and uses it in t()", () => {
-    const html = fs.readFileSync(path.join(SRC, "settings.html"), "utf8");
+    const html = fs.readFileSync(path.join(SRC, "settings.html"), "utf8").replace(/\r\n/g, "\n");
     const nameAt = html.indexOf('<script src="desk-pet-name.js"></script>');
     assert.ok(nameAt >= 0 && nameAt < html.indexOf('<script src="settings-ui-core.js"></script>'));
-    const core = fs.readFileSync(path.join(SRC, "settings-ui-core.js"), "utf8");
+    const core = fs.readFileSync(path.join(SRC, "settings-ui-core.js"), "utf8").replace(/\r\n/g, "\n");
     assert.match(core, /root\.ClawdDeskPetName/);
     assert.match(core, /function t\(key\) \{[\s\S]{0,200}renameText\(/);
   });
 
   it("shows the bunny in Settings → About", () => {
-    const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8");
+    const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8").replace(/\r\n/g, "\n");
     assert.ok(main.includes('aboutHeroSvgPath: DESK_PET_EDITION\n    ? path.join(__dirname, "..", "themes", DESK_PET_THEME_ID, "about-hero.svg")'));
     assert.equal(require("../src/desk-pet-edition").DESK_PET_THEME_ID, "bunny");
     assert.ok(fs.existsSync(path.join(SRC, "..", "themes", "bunny", "about-hero.svg")));
   });
 
   it("titles the Settings window with the pet's name", () => {
-    const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8");
+    const main = fs.readFileSync(path.join(SRC, "main.js"), "utf8").replace(/\r\n/g, "\n");
     assert.ok(main.includes('getTitle: () => (DESK_PET_EDITION ? renameForDeskPet(translate("settingsWindowTitle")) : translate("settingsWindowTitle")),'));
   });
 });
