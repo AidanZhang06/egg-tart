@@ -53,7 +53,7 @@ describe("bunny theme", () => {
     }
     // The sync mirrors the art folder; every shipped hobby is registered.
     const hobbies = fs.readdirSync(ASSETS_DIR).filter((file) => /^hobby-.*\.svg$/.test(file)).sort();
-    assert.deepEqual(theme.idleAnimations.map((entry) => entry.file).sort(), hobbies);
+    assert.deepEqual(theme.idleAnimations.map((entry) => entry.file).filter((file) => file.startsWith("hobby-")).sort(), hobbies);
     assert.ok(hobbies.length >= 3, "carrot, washing up and dandelion at least");
     // Nothing in assets/ sits unused: every file is a state, a reaction or a hobby.
     const unused = fs.readdirSync(ASSETS_DIR).filter((file) => file.endsWith(".svg") && !referenced.includes(file));
@@ -88,24 +88,50 @@ describe("bunny theme", () => {
     assert.ok(content.y <= -2.8 && content.y + content.height >= 20);
   });
 
-  it("plays each hobby as whole loops of its animation", () => {
+  it("plays each hobby and sign as whole loops of its animation", () => {
     const theme = loadTheme();
     for (const entry of theme.idleAnimations) {
-      const loop = loopMs(fs.readFileSync(path.join(ASSETS_DIR, entry.file), "utf8"));
-      assert.ok(loop > 0, `${entry.file} has an animation`);
+      const svg = fs.readFileSync(path.join(ASSETS_DIR, entry.file), "utf8");
+      assert.ok(loopMs(svg) > 0, `${entry.file} has an animation`);
       assert.ok(entry.duration >= 2000 && entry.duration <= 20000, `${entry.file}: ${entry.duration}`);
-      assert.equal(entry.duration % loop, 0, `${entry.file}: ${entry.duration} ms is not whole ${loop} ms loops`);
-      // Every scene animation (all but the shared ear bob/twitch) ends on a whole cycle.
-      for (const { name, ms } of animationDurations(fs.readFileSync(path.join(ASSETS_DIR, entry.file), "utf8"))) {
-        if (isAmbientAnimation(name)) continue;
-        assert.equal(entry.duration % ms, 0, `${entry.file}: ${name || "animation"} (${ms} ms) stops mid-cycle at ${entry.duration} ms`);
+      // Every looping scene animation (all but the shared ear bob/twitch)
+      // ends on a whole cycle, counted from when it starts.
+      for (const { name, ms, delayMs, infinite } of animationDurations(svg)) {
+        if (isAmbientAnimation(name) || !infinite) continue;
+        assert.equal((entry.duration - delayMs) % ms, 0,
+          `${entry.file}: ${name || "animation"} (${ms} ms from ${delayMs} ms) stops mid-cycle at ${entry.duration} ms`);
       }
     }
     // Each hobby is its own rotation slot at its own length.
+    const hobbies = theme.idleAnimations.filter((entry) => entry.file.startsWith("hobby-"));
     const slots = listIdleActivityCandidates(theme).filter((candidate) => candidate.files[0].startsWith("hobby-"));
     assert.deepEqual(
-      slots.map((slot) => [slot.files[0], slot.duration]),
-      theme.idleAnimations.map((entry) => [entry.file, entry.duration]),
+      slots.map((slot) => [slot.files, slot.duration]),
+      hobbies.map((entry) => [[entry.file], entry.duration]),
+    );
+  });
+
+  it("holds up each kind of sign from signs.json as its own rotation slot, never mirrored", () => {
+    const theme = loadTheme();
+    const doc = JSON.parse(fs.readFileSync(path.join(THEME_DIR, "signs.json"), "utf8"));
+    const listed = doc.signs.map((sign) => sign.file);
+    const shipped = fs.readdirSync(ASSETS_DIR).filter((file) => file.startsWith("sign-")).sort();
+    assert.deepEqual(shipped, [...listed].sort(), "no stale or missing sign files");
+    const entries = theme.idleAnimations.filter((entry) => entry.file.startsWith("sign-"));
+    assert.deepEqual(entries.map((entry) => entry.file), listed);
+    for (const sign of doc.signs) {
+      const entry = entries.find((candidate) => candidate.file === sign.file);
+      assert.equal(entry.activityGroup, `signs-${sign.kind}`, sign.file);
+      assert.notEqual(entry.mirrorOnRightSide, true, `${sign.file} has text and must never mirror`);
+      // The board has risen and swayed at least once before the bunny puts it down.
+      assert.ok(entry.duration >= doc.riseMs + doc.loopMs, `${sign.file}: ${entry.duration} ms`);
+    }
+    // One slot per kind, weighted like one hobby, holding exactly that kind's signs.
+    const kinds = [...new Set(doc.signs.map((sign) => sign.kind))];
+    const slots = listIdleActivityCandidates(theme).filter((candidate) => candidate.files[0].startsWith("sign-"));
+    assert.deepEqual(
+      slots.map((slot) => slot.files),
+      kinds.map((kind) => doc.signs.filter((sign) => sign.kind === kind).map((sign) => sign.file)),
     );
   });
 

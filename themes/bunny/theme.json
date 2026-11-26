@@ -80,8 +80,18 @@
   },
   "idleAnimations": [
     {
+      "file": "hobby-avocado.svg",
+      "duration": 15000,
+      "mirrorOnRightSide": true
+    },
+    {
       "file": "hobby-baozi.svg",
       "duration": 13000,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-blueberries.svg",
+      "duration": 16000,
       "mirrorOnRightSide": true
     },
     {
@@ -122,6 +132,11 @@
     {
       "file": "hobby-grooming.svg",
       "duration": 13800,
+      "mirrorOnRightSide": true
+    },
+    {
+      "file": "hobby-hiking.svg",
+      "duration": 16000,
       "mirrorOnRightSide": true
     },
     {
@@ -168,6 +183,11 @@
       "file": "hobby-weights.svg",
       "duration": 12000,
       "mirrorOnRightSide": true
+    },
+    {
+      "file": "sign-love-i-love-you-mommy.svg",
+      "duration": 12000,
+      "activityGroup": "signs-love"
     }
   ],
   "sleepSequence": {

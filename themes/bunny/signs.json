@@ -1,0 +1,25 @@
+{
+  "loopMs": 4000,
+  "riseMs": 800,
+  "kinds": {
+    "encouragement": {
+      "name": "Encouragement",
+      "filePrefix": "sign-cheer-"
+    },
+    "love": {
+      "name": "Love & sweet",
+      "filePrefix": "sign-love-"
+    },
+    "missing": {
+      "name": "Missing you",
+      "filePrefix": "sign-miss-"
+    }
+  },
+  "signs": [
+    {
+      "file": "sign-love-i-love-you-mommy.svg",
+      "phrase": "I love you mommy",
+      "kind": "love"
+    }
+  ]
+}

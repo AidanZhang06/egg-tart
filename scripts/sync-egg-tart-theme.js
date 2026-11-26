@@ -130,7 +130,7 @@ function syncEggTartTheme({ sourceDir, themeDir }) {
   return { copied, removed, signs: signs.length, signDuration: duration };
 }
 
-module.exports = { syncEggTartTheme, signDuration, SIGN_GROUP };
+module.exports = { syncEggTartTheme, signDuration, signGroup, SIGN_GROUP, SIGN_FILE_RE };
 
 if (require.main === module) {
   const [sourceArg, themeArg] = process.argv.slice(2);

@@ -6,7 +6,10 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const { syncBunnyTheme, loopMs, hobbyDuration } = require("../scripts/sync-bunny-theme");
+const {
+  syncBunnyTheme, loopMs, hobbyDuration, signDuration, swayStart, animationDurations,
+} = require("../scripts/sync-bunny-theme");
+const eggTartSync = require("../scripts/sync-egg-tart-theme");
 const { makeBunnyIcons, svgRects, ICO_SIZES } = require("../scripts/make-bunny-icons");
 
 const tempDirs = [];
@@ -54,6 +57,29 @@ describe("loop lengths", () => {
     // A second time in the shorthand is a delay, not a longer loop.
     assert.equal(loopMs("<style>.a { animation: a 3s 9s infinite; }</style>"), 3000);
     assert.equal(loopMs("<style>.a { animation: a 2s infinite, b 6s infinite; }</style>"), 6000);
+  });
+
+  it("reads each animation's delay and whether it loops", () => {
+    assert.deepEqual(
+      animationDurations("<style>.a { animation: a 2s 0.55s infinite ease; } .b { animation: b 0.8s ease-out both; }</style>"),
+      [{ name: "a", ms: 2000, delayMs: 550, infinite: true }, { name: "b", ms: 800, delayMs: 0, infinite: false }],
+    );
+  });
+
+  it("holds a sign up for its rise and then whole sways, ending where a sway ends", () => {
+    // The bunny's sways run from the first frame, with the 0.8 s rise on top.
+    const bunnySign = "<style>.r { animation: sg-rise 0.8s ease-out both; } .t { animation: sg-tilt 4s infinite; } "
+      + ".e { animation: twitch-l 7s infinite; }</style>";
+    assert.equal(swayStart(bunnySign, 4000), 0);
+    assert.equal(signDuration({ loopMs: 4000, riseMs: 800, start: 0 }), 12000);
+    // The egg tart's sways wait 0.55 s for the rise: the same rule gives its 12.55 s.
+    const eggTartSign = "<style>.f { animation: bl-float 0.55s ease-out both; } .s { animation: bl-sway 2s 0.55s infinite; }</style>";
+    assert.equal(swayStart(eggTartSign, 2000), 550);
+    assert.equal(signDuration({ loopMs: 2000, riseMs: 550, start: 550 }), 12550);
+    assert.equal(eggTartSync.signDuration({ loopMs: 2000, riseMs: 550 }), 12550);
+    // At least one sway after the board is up, and never past 20 s.
+    assert.equal(signDuration({ loopMs: 2000, riseMs: 13000, start: 0 }), 14000);
+    assert.equal(signDuration({ loopMs: 30000, riseMs: 800, start: 0 }), 20000);
   });
 
   it("plays whole loops close to 12 s and never past 20 s", () => {
@@ -145,6 +171,59 @@ describe("syncBunnyTheme", () => {
     theme = full.read();
     assert.deepEqual(theme.sleepSequence, { mode: "full" });
     assert.deepEqual(theme.eyeTracking.states, ["idle", "dozing"]);
+  });
+
+  it("holds up the signs signs.json lists, one slot per kind, never mirrored", () => {
+    const sign = "<style>.r { animation: sg-rise 0.8s ease-out both; } .t { animation: sg-tilt 4s infinite; }</style>";
+    const manifest = {
+      loopMs: 4000,
+      riseMs: 800,
+      kinds: { love: { name: "Love & sweet", filePrefix: "sign-love-" } },
+      signs: [{ file: "sign-love-hi.svg", phrase: "Hi", kind: "love" }],
+    };
+    const { sourceDir, themeDir, read } = fixture({
+      art: {
+        "idle.svg": "<svg/>",
+        "hobby-carrot.svg": anim(12),
+        "sign-love-hi.svg": sign,
+        "sign-cheer-draft.svg": sign,
+        "signs.json": JSON.stringify(manifest),
+      },
+      themeAssets: { "sign-love-old.svg": sign },
+      theme: { idleAnimations: [{ file: "sign-love-old.svg", duration: 8000, activityGroup: "signs-love" }] },
+    });
+
+    const result = syncBunnyTheme({ sourceDir, themeDir });
+
+    assert.deepEqual(result.skipped, ["sign-cheer-draft.svg"], "not listed in signs.json");
+    assert.deepEqual(fs.readdirSync(path.join(themeDir, "assets")).sort(), ["hobby-carrot.svg", "idle.svg", "sign-love-hi.svg"]);
+    assert.deepEqual(read().idleAnimations, [
+      { file: "hobby-carrot.svg", duration: 12000, mirrorOnRightSide: true },
+      { file: "sign-love-hi.svg", duration: 12000, activityGroup: "signs-love" },
+    ]);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(themeDir, "signs.json"), "utf8")), manifest);
+
+    // Without signs.json the signs go away again.
+    fs.rmSync(path.join(sourceDir, "signs.json"));
+    syncBunnyTheme({ sourceDir, themeDir });
+    assert.deepEqual(read().idleAnimations.map((entry) => entry.file), ["hobby-carrot.svg"]);
+    assert.ok(!fs.existsSync(path.join(themeDir, "signs.json")));
+    assert.ok(!fs.existsSync(path.join(themeDir, "assets", "sign-love-hi.svg")));
+  });
+
+  it("refuses a signs.json naming a missing file or an unknown kind, before copying anything", () => {
+    const missing = fixture({ art: {
+      "idle.svg": "<svg/>",
+      "signs.json": JSON.stringify({ loopMs: 4000, riseMs: 800, signs: [{ file: "sign-love-gone.svg", phrase: "x" }] }),
+    } });
+    assert.throws(() => syncBunnyTheme(missing), /lists sign-love-gone\.svg, but it is not in/);
+    assert.deepEqual(fs.readdirSync(path.join(missing.themeDir, "assets")), [], "nothing copied");
+    const unknown = fixture({ art: {
+      "idle.svg": "<svg/>",
+      "sign-love-hi.svg": "<svg/>",
+      "signs.json": JSON.stringify({ loopMs: 4000, kinds: {}, signs: [{ file: "sign-love-hi.svg", phrase: "x", kind: "love" }] }),
+    } });
+    assert.throws(() => syncBunnyTheme(unknown), /Unknown or unsafe sign kind/);
   });
 
   it("refuses an art folder without idle.svg or with unsafe names", () => {

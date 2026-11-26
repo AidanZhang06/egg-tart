@@ -16,6 +16,11 @@
 //     shared ear bob/twitch), about 12 s;
 //     hand-set fields on an existing entry (mirrorOnRightSide, activityGroup)
 //     are kept, and new hobbies mirror near the right screen edge;
+//   • holds up the signs listed in signs.json the way the egg tart does: each
+//     kind (love, encouragement, …) is one rotation slot ("signs-<kind>"),
+//     signs never mirror (they carry text), and each plays its rise and then
+//     whole sways; sign-*.svg files signs.json does not list are left out, and
+//     signs.json is copied next to theme.json;
 //   • binds the click reactions to react-left/right/double.svg when they exist,
 //     and otherwise to the happy hop (attention.svg);
 //   • switches to the full yawn/doze/collapse sleep sequence once all its art
@@ -25,9 +30,11 @@
 
 const fs = require("fs");
 const path = require("path");
+const { signGroup, SIGN_FILE_RE } = require("./sync-egg-tart-theme");
 
 const ASSET_FILE_RE = /^[a-z0-9][a-z0-9-]*\.svg$/;
 const HOBBY_FILE_RE = /^hobby-[a-z0-9]+(?:-[a-z0-9]+)*\.svg$/;
+const SIGNS_MANIFEST = "signs.json";
 
 // Hobby beats aim for about 12 s of whole loops, and never pass the app's
 // 20 s ceiling for an idle animation (src/idle-activity.js).
@@ -72,9 +79,9 @@ const REACTION_FALLBACK_MS = 2800;
 const AMBIENT_ANIMATION_RE = /^(?:bob|twitch)-/;
 
 /**
- * Every CSS animation in an SVG as { name, ms } (name is null for a bare
- * animation-duration). In the shorthand the first time is the duration; a
- * second one would be the delay.
+ * Every CSS animation in an SVG as { name, ms, delayMs, infinite } (name is
+ * null for a bare animation-duration, which counts as looping). In the
+ * shorthand the first time is the duration and a second one the delay.
  */
 function animationDurations(svgText) {
   const out = [];
@@ -82,12 +89,14 @@ function animationDurations(svgText) {
   for (const decl of decls) {
     const shorthand = /^animation\s*:/.test(decl);
     for (const part of decl.slice(decl.indexOf(":") + 1).split(",")) {
-      const time = part.match(/(?:^|\s)(\d+(?:\.\d+)?|\.\d+)(ms|s)\b/);
-      if (!time) continue;
-      const ms = time[2] === "ms" ? Number(time[1]) : Number(time[1]) * 1000;
+      const times = [...part.matchAll(/(?:^|\s)(\d+(?:\.\d+)?|\.\d+)(ms|s)\b/g)]
+        .map((time) => (time[2] === "ms" ? Number(time[1]) : Number(time[1]) * 1000));
+      const ms = times[0];
       if (!Number.isFinite(ms) || ms <= 0) continue;
       const name = shorthand ? (part.trim().match(/^([A-Za-z_][\w-]*)/) || [])[1] || null : null;
-      out.push({ name, ms });
+      const delayMs = shorthand && Number.isFinite(times[1]) ? times[1] : 0;
+      const infinite = shorthand ? /\binfinite\b/.test(part) : true;
+      out.push({ name, ms, delayMs, infinite });
     }
   }
   return out;
@@ -117,6 +126,48 @@ function hobbyDuration(loop) {
   return Math.round(loop * loops);
 }
 
+/**
+ * How long a sign plays: its rise once, then whole sways, about 12 s, ending
+ * where a sway ends. `start` is when the sways begin (their animation-delay):
+ * the egg tart's sways wait for the rise, the bunny's run from the first frame
+ * with the rise on top, so its sways end at whole loops from 0.
+ */
+function signDuration({ loopMs: loop, riseMs: rise, start = 0 }) {
+  const sway = Number.isFinite(loop) && loop > 0 ? loop : HOBBY_TARGET_MS;
+  const up = Number.isFinite(rise) && rise > 0 ? rise : 0;
+  let loops = Math.max(1, Math.round((HOBBY_TARGET_MS - start) / sway));
+  while (start + loops * sway <= up) loops += 1; // the board is up before it goes
+  while (loops > 1 && start + loops * sway > HOBBY_MAX_MS) loops -= 1;
+  return Math.min(HOBBY_MAX_MS, Math.round(start + loops * sway));
+}
+
+/** When a sign's sways (its looping `loop` ms scene animations) begin, in ms. */
+function swayStart(svgText, loop) {
+  const sways = animationDurations(svgText)
+    .filter((animation) => animation.infinite && !isAmbientAnimation(animation.name) && Math.round(animation.ms) === loop);
+  return sways.reduce((max, animation) => Math.max(max, animation.delayMs), 0);
+}
+
+/**
+ * The signs signs.json lists, checked before anything is copied: names, files
+ * and kinds. null when the art folder has no signs.json.
+ */
+function readSigns(sourceDir, has) {
+  const manifestPath = path.join(sourceDir, SIGNS_MANIFEST);
+  if (!fs.existsSync(manifestPath)) return null;
+  const doc = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  const signs = Array.isArray(doc.signs) ? doc.signs : [];
+  for (const sign of signs) {
+    const file = sign && sign.file;
+    if (typeof file !== "string" || !SIGN_FILE_RE.test(file)) {
+      throw new Error(`Unsafe sign file name in ${SIGNS_MANIFEST}: ${JSON.stringify(file)}`);
+    }
+    if (!has.has(file)) throw new Error(`${SIGNS_MANIFEST} lists ${file}, but it is not in ${sourceDir}`);
+    signGroup(sign, doc.kinds);
+  }
+  return { doc, signs };
+}
+
 // Settings → About shows a 140×112 picture: a 5:4 crop of the idle canvas
 // around the bunny (arms x −1.4–21.4, ear tips y −2.8, shadow to y 21).
 const ABOUT_HERO_VIEWBOX = "-5.6 -3.5 31.25 25";
@@ -142,7 +193,13 @@ function syncBunnyTheme({ sourceDir, themeDir }) {
   const unsafe = art.filter((file) => !ASSET_FILE_RE.test(file));
   if (unsafe.length) throw new Error(`Unsafe SVG file name(s) in ${sourceDir}: ${unsafe.join(", ")}`);
   if (!art.includes("idle.svg")) throw new Error(`${sourceDir} has no idle.svg`);
-  const has = new Set(art);
+  const signed = readSigns(sourceDir, new Set(art));
+  const signs = signed ? signed.signs : [];
+  const listedSigns = new Set(signs.map((sign) => sign.file));
+  // Only the signs signs.json lists ship; any other sign-*.svg is left out.
+  const skipped = art.filter((file) => SIGN_FILE_RE.test(file) && !listedSigns.has(file));
+  const shipped = art.filter((file) => !skipped.includes(file));
+  const has = new Set(shipped);
 
   // Mirror the SVGs.
   fs.mkdirSync(assetsDir, { recursive: true });
@@ -153,7 +210,7 @@ function syncBunnyTheme({ sourceDir, themeDir }) {
       removed.push(file);
     }
   }
-  for (const file of art) fs.copyFileSync(path.join(sourceDir, file), path.join(assetsDir, file));
+  for (const file of shipped) fs.copyFileSync(path.join(sourceDir, file), path.join(assetsDir, file));
 
   // States: own art, else the fallback.
   const states = {};
@@ -179,7 +236,24 @@ function syncBunnyTheme({ sourceDir, themeDir }) {
     const { file: _file, duration: _duration, ...kept } = previous.get(file) || { mirrorOnRightSide: true };
     return { file, duration: hobbyDuration(loop), ...kept, loop };
   });
-  theme.idleAnimations = hobbies.map(({ loop, ...entry }) => entry);
+
+  // Signs: one slot per kind, the manifest's sway and rise, never mirrored.
+  let signMs = 0;
+  if (signs.length) {
+    const texts = signs.map((sign) => fs.readFileSync(path.join(sourceDir, sign.file), "utf8"));
+    const declared = Number(signed.doc.loopMs);
+    const loop = Number.isFinite(declared) && declared > 0 ? Math.round(declared) : loopMs(texts[0]);
+    const starts = [...new Set(texts.map((text) => swayStart(text, loop)))];
+    if (starts.length > 1) throw new Error(`Signs disagree on when their ${loop} ms sway starts: ${starts.join(", ")} ms`);
+    signMs = signDuration({ loopMs: loop, riseMs: Number(signed.doc.riseMs), start: starts[0] });
+  }
+  theme.idleAnimations = [
+    ...hobbies.map(({ loop, ...entry }) => entry),
+    ...signs.map((sign) => ({ file: sign.file, duration: signMs, activityGroup: signGroup(sign, signed.doc.kinds) })),
+  ];
+  const signsPath = path.join(themeDir, SIGNS_MANIFEST);
+  if (signed) fs.writeFileSync(signsPath, JSON.stringify(signed.doc, null, 2) + "\n");
+  else fs.rmSync(signsPath, { force: true });
 
   // Click reactions.
   const reactions = {};
@@ -201,14 +275,18 @@ function syncBunnyTheme({ sourceDir, themeDir }) {
   fs.writeFileSync(themePath, JSON.stringify(theme, null, 2) + "\n");
   writeAboutHero(theme, themeDir);
   return {
-    copied: art,
+    copied: shipped,
     removed,
+    skipped,
     hobbies: hobbies.map(({ file, duration, loop }) => ({ file, duration, loop })),
+    signs: signs.map((sign) => ({ file: sign.file, duration: signMs, activityGroup: signGroup(sign, signed.doc.kinds) })),
     sleepMode: theme.sleepSequence.mode,
   };
 }
 
-module.exports = { syncBunnyTheme, loopMs, hobbyDuration, animationDurations, isAmbientAnimation, STATE_FALLBACKS };
+module.exports = {
+  syncBunnyTheme, loopMs, hobbyDuration, signDuration, swayStart, animationDurations, isAmbientAnimation, STATE_FALLBACKS,
+};
 
 if (require.main === module) {
   const args = process.argv.slice(2);
@@ -233,6 +311,8 @@ if (require.main === module) {
       const loops = hobby.loop > 0 ? Math.round(hobby.duration / hobby.loop) : 0;
       console.log(`  ${hobby.file}: ${hobby.duration} ms (${loops} × ${hobby.loop} ms loop)`);
     }
+    for (const sign of result.signs) console.log(`  ${sign.file}: ${sign.duration} ms (${sign.activityGroup})`);
+    if (result.skipped.length) console.log(`Left out sign(s) signs.json does not list: ${result.skipped.join(", ")}`);
   } catch (err) {
     console.error(`Sync failed: ${err.message}`);
     process.exit(1);
